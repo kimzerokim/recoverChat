@@ -36,10 +36,11 @@ function init(app) {
 
     app.get('/auth/facebook', passport.authenticate('facebook'));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        successRedirect: '/',
-        failureRedirect: '/'
-    }));
-    app.get('/logout', function(req, res){
+        failureRedirect: '/welcome'
+    }), function (req, res) {
+        res.redirect('/');
+    });
+    app.get('/logout', function (req, res) {
         //
         // passport 에서 지원하는 logout 메소드이다.
         // req.session.passport 의 정보를 삭제한다.
@@ -47,4 +48,4 @@ function init(app) {
         req.logout();
         res.redirect('/');
     });
-};
+}

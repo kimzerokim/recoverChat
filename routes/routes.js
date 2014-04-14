@@ -1,10 +1,5 @@
-exports.routeRoot = function (req, res) {
-    if (req.isAuthenticated()) {
-        res.render('friendChat');
-    }
-    else {
-        res.render('welcome');
-    }
+exports.friendChat = function (req, res) {
+    res.render('friendChat');
 };
 
 exports.welcome = function (req, res) {

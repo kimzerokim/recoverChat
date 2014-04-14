@@ -34,13 +34,13 @@ app.configure(function () {
     // Since this is the last non-error-handling
     // middleware use()d, we assume 404, as nothing else
     // responded.
-
-    app.use(function (req, res, next) {
-        // the status option, or res.statusCode = 404
-        // are equivalent, however with the option we
-        // get the "status" local available as well
-        res.render('message', { message: "페이지를 찾을 수 없어요!" });
-    });
+//
+//    app.use(function (req, res, next) {
+//        // the status option, or res.statusCode = 404
+//        // are equivalent, however with the option we
+//        // get the "status" local available as well
+//        res.render('message', { message: "페이지를 찾을 수 없어요!" });
+//    });
 
     // error-handling middleware, take the same form
     // as regular middleware, however they require an
@@ -54,12 +54,12 @@ app.configure(function () {
     // would remain being executed, however here
     // we simply respond with an error page.
 
-    app.use(function (err, req, res, next) {
-        // we may use properties of the error object
-        // here and next(err) appropriately, or if
-        // we possibly recovered from the error, simply next().
-        res.render('message', {message: "알 수 없는 에러입니다. 다시 시도해주세요" });
-    });
+//    app.use(function (err, req, res, next) {
+//        // we may use properties of the error object
+//        // here and next(err) appropriately, or if
+//        // we possibly recovered from the error, simply next().
+//        res.render('message', {message: "알 수 없는 에러입니다. 다시 시도해주세요" });
+//    });
 });
 
 // development only
@@ -67,7 +67,15 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', routes.routeRoot);
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/welcome');
+}
+
+app.get('/', ensureAuthenticated, routes.friendChat);
+app.get('/welcome', routes.welcome);
 
 server.listen(app.get('port'), function () {
     console.log('\n///////////////////////////////////////////////\n' +
