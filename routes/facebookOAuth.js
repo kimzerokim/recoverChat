@@ -24,7 +24,7 @@ function init(app) {
         clientID: pkginfo.oauth.facebook.FACEBOOK_APP_ID,
         clientSecret: pkginfo.oauth.facebook.FACEBOOK_APP_SECRET,
         callbackURL: pkginfo.oauth.facebook.callbackURL,
-        profileFields: 'https://graph.facebook.com/me?fields=picture,id,name,username,first_name,last_name,middle_name,gender,link,email'
+        profileFields: ['id', 'displayName', 'photos', 'username']
     }, function (accessToken, refreshToken, profile, done) {
         //
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
