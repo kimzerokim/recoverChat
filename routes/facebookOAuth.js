@@ -31,7 +31,9 @@ function init(app) {
         // done 메소드에 전달된 정보가 세션에 저장된다.
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //
-        return done(null, profile);
+        process.nextTick(function () {
+            return done(null, profile);
+        });
     }));
 
     app.get('/auth/facebook', passport.authenticate('facebook'));

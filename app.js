@@ -9,13 +9,8 @@ var express = require('express'),
     app = express(),
     server = http.createServer(app);
 
-//configure passport-facebook
-require('./routes/facebookOAuth')(app);
-
-
 // app environments
 app.configure(function () {
-    app.use(express.static(path.join(__dirname, 'public')), {maxAge: 30 * 24 * 60 * 60 * 1000});
     app.set('port', process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
@@ -30,6 +25,9 @@ app.configure(function () {
     app.use(express.session({ secret: "keyboard cat" }));
     app.use(express.methodOverride());
     app.use(express.compress());
+
+    //configure passport-facebook
+    require('./routes/facebookOAuth')(app);
     app.use(app.router);
     // Since this is the last non-error-handling
     // middleware use()d, we assume 404, as nothing else
@@ -60,6 +58,8 @@ app.configure(function () {
 //        // we possibly recovered from the error, simply next().
 //        res.render('message', {message: "알 수 없는 에러입니다. 다시 시도해주세요" });
 //    });
+
+    app.use(express.static(path.join(__dirname, 'public')), {maxAge: 30 * 24 * 60 * 60 * 1000});
 });
 
 // development only

@@ -1,5 +1,6 @@
 exports.friendChat = function (req, res) {
-    res.render('friendChat');
+    res.render('friendChat', { user: req.user });
+    console.log('hello');
 };
 
 exports.welcome = function (req, res) {

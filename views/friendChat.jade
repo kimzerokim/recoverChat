@@ -9,4 +9,8 @@ html
         link(href='/stylesheets/welcome.css', rel='stylesheet', type='text/css')
     body
         #title
-            | 인증완료
+            | #{user.id}
+            br
+            | #{user.username}
+            br
+            | #{user.displayName}
