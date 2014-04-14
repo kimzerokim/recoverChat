@@ -2,18 +2,18 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var http = require('http');
-var path = require('path');
-
-var app = express(),
+var express = require('express'),
+    routes = require('./routes/routes'),
+    http = require('http'),
+    path = require('path'),
+    app = express(),
     server = http.createServer(app);
 
+//configure passport-facebook
 require('./routes/facebookOAuth')(app);
 
-// all environments
 
+// app environments
 app.configure(function () {
     app.use(express.static(path.join(__dirname, 'public')), {maxAge: 30 * 24 * 60 * 60 * 1000});
     app.set('port', process.env.PORT || 3000);
@@ -67,9 +67,7 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', function (req, res) {
-    res.render("welcome");
-});
+app.get('/', routes.routeRoot);
 
 server.listen(app.get('port'), function () {
     console.log('\n///////////////////////////////////////////////\n' +
