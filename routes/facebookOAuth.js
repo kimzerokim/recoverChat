@@ -23,7 +23,8 @@ function init(app) {
     passport.use(new FacebookStrategy({
         clientID: pkginfo.oauth.facebook.FACEBOOK_APP_ID,
         clientSecret: pkginfo.oauth.facebook.FACEBOOK_APP_SECRET,
-        callbackURL: pkginfo.oauth.facebook.callbackURL
+        callbackURL: pkginfo.oauth.facebook.callbackURL,
+        profileFields: 'https://graph.facebook.com/me?fields=picture,id,name,username,first_name,last_name,middle_name,gender,link,email'
     }, function (accessToken, refreshToken, profile, done) {
         //
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -36,7 +37,7 @@ function init(app) {
         });
     }));
 
-    app.get('/auth/facebook', passport.authenticate('facebook'));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'publish_actions' }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/welcome'
     }), function (req, res) {
