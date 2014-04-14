@@ -1,0 +1,30 @@
+body {
+    padding : 30px;
+    background-color: #2b2b2b;
+}
+
+#title {
+    position: absolute;
+    left : 50%;
+    margin : 70px 0 0 -261px;
+}
+
+#facebookLogin {
+    position : absolute;
+    left : 50%;
+    margin : 432px 0 0  -110px;
+    cursor : pointer;
+}
+
+#contact {
+    position : absolute;
+    left: 50%;
+    margin : 575px 0 0 -34px;
+    cursor : pointer;
+}
+
+#right {
+    position : absolute;
+    left : 50%;
+    margin : 607px 0 10px -106px;
+}
