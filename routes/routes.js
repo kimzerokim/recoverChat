@@ -1,3 +1,5 @@
+var facebookInfo = require('../routes/facebookInfo');
+
 exports.friendChat = function (req, res) {
     res.render('friendChat', { user: req.user });
 };
@@ -9,4 +11,8 @@ exports.welcome = function (req, res) {
     else {
         res.render('welcome');
     }
+};
+
+exports.contact = function (req, res) {
+    res.render('contact');
 };

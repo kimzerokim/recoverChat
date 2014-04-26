@@ -6,20 +6,20 @@ body {
 #title {
     position: absolute;
     left : 50%;
-    margin : 70px 0 0 -261px;
+    margin : 60px 0 0 -261px;
 }
 
 #facebookLogin {
     position : absolute;
     left : 50%;
-    margin : 432px 0 0  -110px;
+    margin : 402px 0 0  -110px;
     cursor : pointer;
 }
 
 #contact {
     position : absolute;
     left: 50%;
-    margin : 575px 0 0 -34px;
+    margin : 579px 0 0 -34px;
     cursor : pointer;
 }
 

@@ -1,0 +1,63 @@
+body {
+    padding : 30px;
+    background-color: #2b2b2b;
+}
+
+#logo {
+    position : absolute;
+    left: 50%;
+    margin : 20px 0 0 -141px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#logo img {
+    width: 280px;
+    height: 86px;
+}
+
+.mail {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.mailBox {
+    margin-top: 150px;
+    padding: 8px 30px 14px 30px;
+    background-color: #d8d8d8;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color : #585858;
+}
+
+.mailBox > h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#mailTextArea {
+    width: 100%;
+    border: 1px solid #bababa;
+    border-radius: 2px;
+    font-size: 14px;
+    margin-right: 2%;
+    resize: none;
+    line-height: 23px;
+}
+
+.form-actions {
+    width: 100%;
+    margin: 22px 0 0 0;
+    text-align: center;
+}
+
+#mailButton {
+    color : #6e6e6e;
+}
+
+#right {
+    position : absolute;
+    left : 50%;
+    margin : 70px 0 20px -106px;
+}

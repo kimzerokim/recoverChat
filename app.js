@@ -28,6 +28,7 @@ app.configure(function () {
 
     //configure passport-facebook
     require('./routes/facebookOAuth')(app);
+
     app.use(app.router);
     // Since this is the last non-error-handling
     // middleware use()d, we assume 404, as nothing else
@@ -76,6 +77,8 @@ function ensureAuthenticated(req, res, next) {
 
 app.get('/', ensureAuthenticated, routes.friendChat);
 app.get('/welcome', routes.welcome);
+app.get('/contact', routes.contact);
+app.get('/testchat', routes.friendChat);
 
 server.listen(app.get('port'), function () {
     console.log('\n///////////////////////////////////////////////\n' +

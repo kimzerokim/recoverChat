@@ -1,9 +1,9 @@
 /**
  * Created by YoungKim on 2014. 4. 13..
  */
-module.exports = init;
 
-function init(app) {
+
+var init = function(app) {
     var pkginfo = require('../package');
     var passport = require('passport');
 
@@ -37,7 +37,7 @@ function init(app) {
         });
     }));
 
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'publish_actions' }));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['read_stream', 'publish_actions'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/welcome'
     }), function (req, res) {
@@ -51,4 +51,6 @@ function init(app) {
         req.logout();
         res.redirect('/');
     });
-}
+};
+
+module.exports = init;

@@ -1,0 +1,27 @@
+html
+    head
+        meta(http-equiv='Content-Type', content='text/html', charset='UTF-8')
+        meta(name='description', content='recover contactPage')
+        meta(name='author', content='2014 recover')
+        link(rel='icon', type ='image/x-icon',href='/images/favicon.ico')
+        title
+            | Recover
+        link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet', type='text/css')
+        link(href='/stylesheets/contact.css', rel='stylesheet', type='text/css')
+    body
+        #logo(onclick = 'location.href=\'/\';')
+            img(src='images/recover_contact.png')
+        .container
+            .row
+                .col-md-6.col-md-offset-3.mail
+                    .mailBox
+                        h3
+                            | 개선사항 및 서비스 문의
+                        form.writeMail(method ='post', role='form', action = '/contact/add')
+                            textarea#mailTextArea.simple(rows='3', type='text', name='mailBody')
+                            .form-actions
+                                button#mailButton.btn.btn-default(type='submit')  의견 보내기
+        #right
+            img(src='/images/right.png')
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+        script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
