@@ -27,7 +27,7 @@ body {
     background-color: #d8d8d8;
 }
 
-#userPic {
+#userPic img {
     width: 36px;
     height: 36px;
     -webkit-border-radius: 3px;
@@ -103,7 +103,7 @@ body {
     overflow: hidden;
 }
 
-.myMessage .profile {
+.myMessage .profile img {
     float: right;
 }
 
@@ -128,7 +128,7 @@ body {
     overflow: hidden;
 }
 
-.otherMessage .profile {
+.otherMessage .profile img {
     float: left;
 }
 
