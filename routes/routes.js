@@ -4,6 +4,10 @@ exports.friendChat = function (req, res) {
     res.render('friendChat', { user: req.user });
 };
 
+exports.randomChat = function (req, res) {
+    res.render('randomChat', { user: req.user });
+};
+
 exports.welcome = function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect('/')

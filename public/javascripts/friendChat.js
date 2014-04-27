@@ -1,32 +1,30 @@
-//var APP = APP || {};
-//var CHAT = CHAT || {};
-//
-//APP.settings = {
-//    debug: true,	// debuggin turned on?
-//    socketURL: 'http://www.skkuleaf.com:3000'	// socket url to point to
-//};
-//
-//var socket = io.connect(APP.settings.socketURL);
-//
-//// Socket Connection/Disconnection
-//socket.on('connect', function () {
-//    // create/join a room using page title
-//    socket.emit('join', 'lobby');
-//    if (APP.settings.debug) console.log('The client has connected');
-//});
-//
-//// what to do on dissconection
-//socket.on('disconnect', function () {
-//    if (APP.settings.debug) console.log('The client has disconnected');
-//});
-//
-//// receives message from server
-//socket.on('getmessage', function (message) {
-//    var json = JSON.parse(message);
-//    if (APP.settings.debug) console.log(json);
-//    CHAT.message.add(json)
-//});
+//chatRoom picture Change
+var pictuerChange = (function () {
+    var myPicture = function () {
+        var myMessage = document.getElementsByClassName('myMessage'),
+            myMessageLength = myMessage.length,
+            myPicture = userPic = document.getElementById('userPic').innerHTML;
 
+        for (var i = 0; i < myMessageLength; i++) {
+            myMessage[i].firstChild.innerHTML = myPicture;
+        }
+    };
+
+    var otherPicture = function () {
+        var otherMessage = document.getElementsByClassName('otherMessage'),
+            otherMessageLength = otherMessage.length;
+        for (var j = 0; j < otherMessageLength; j++) {
+
+        }
+    };
+
+    return {
+        my: myPicture,
+        other: otherPicture
+    }
+})();
+
+//for chatMenu buttonToggle
 var buttonToggle = (function () {
     var menuPopup = function () {
         var info = document.getElementById('info'),
@@ -50,14 +48,11 @@ var buttonToggle = (function () {
 
     };
 
+    // addEvent
     var addEvent = function () {
         var chatMenuButton = document.getElementById('chatMenu'),
             info = document.getElementById('info'),
             chatInfo = document.getElementById('chatInfo');
-
-        console.log('hello');
-        console.log(info);
-        console.log(chatMenuButton);
 
         info.style.display = 'none';
         chatInfo.style.display = 'none';
@@ -86,8 +81,6 @@ var dynamicResize = (function () {
 (function () {
     dynamicResize.changeChatFieldHeight();
     buttonToggle.addEvent();
+    pictuerChange.my();
     window.onresize = dynamicResize.changeChatFieldHeight;
-//    var iscroll = new IScroll('#chatScroller', {
-//        mouseWheel: true
-//    });
 })();

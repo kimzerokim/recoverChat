@@ -1,0 +1,52 @@
+html
+    head
+        meta(http-equiv='Content-Type', content='text/html', charset='UTF-8')
+        meta(name='description', content='recover friendChatPage')
+        meta(name='author', content='2014 recover')
+        link(rel='icon', type ='image/x-icon',href='/images/favicon.ico')
+        title
+            | Recover
+        link(href='/stylesheets/randomChat.css', rel='stylesheet', type='text/css')
+    body
+        #logo(onclick = 'location.href=\'/\';')
+            img(src='/images/recover_contact.png')
+        #chatServiceStatus
+            #userInfo
+                #userPic
+                    img(src = '#{user.photos[0].value}')
+                #userName
+                    | #{user.displayName}
+                #friendChat(onclick = 'location.href=\'/\';')
+                    | 친구와 채팅
+                #userChat(onclick = 'location.href=\'/randomChat\';')
+                    | 랜덤 채팅
+        #chatContainer
+            #connectionStatus
+                | 연결 안 됨
+            section#chatScroller
+                #messages
+                #info
+                    #alert
+                        #friendRequest
+                            | 상대방이 당신이 누군지 궁금해 해요!
+                        button#friendRequestAccept
+                            | 알려주기
+                    #chatInfo
+                        #chatTimeInfo
+                            | 19분 째 채팅 중!
+                        button#findFriend
+                            | 누구에요?
+                        button#leaveChat
+                            | 채팅나가기
+            #chatBar
+                #chatMenu
+                    img(src='images/more.png')
+                input#chatInput(type='text', placeholder='내용을 입력하세요', name='chatBody', autocomplete='off')
+                #chatSend
+                    | 전 송
+        #contact(onclick = 'location.href=\'/contact\';')
+            img(src='/images/contact.png')
+        #right
+            img(src='/images/right.png')
+        script(src='//cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-infinite.min.js')
+        script(src='/javascripts/friendChat.js')

@@ -76,9 +76,11 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.get('/', ensureAuthenticated, routes.friendChat);
+app.get('/randomChat', ensureAuthenticated, routes.randomChat);
 app.get('/welcome', routes.welcome);
 app.get('/contact', routes.contact);
 app.get('/testchat', routes.friendChat);
+app.get('/randomChatTest', routes.randomChat);
 
 server.listen(app.get('port'), function () {
     console.log('\n///////////////////////////////////////////////\n' +

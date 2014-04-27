@@ -51,7 +51,7 @@ body {
 #friendChat {
     width: 90px;
     height: 36px;
-    background-color: #30605a;
+    background-color: #55AA9F;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     margin: 7px 12px 0 0;
@@ -67,7 +67,7 @@ body {
 #userChat {
     width: 90px;
     height: 36px;
-    background-color: #55AA9F;
+    background-color: #30605a;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     margin: 7px 10px 0 0;
