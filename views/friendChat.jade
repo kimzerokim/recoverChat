@@ -21,9 +21,9 @@ html
         #chatServiceStatus
             #userInfo
                 #userPic
-                    img(src = '#{user.photos[0].value}')
+                    img(src = 'images/Anonyprofile.png')
                 #userName
-                    | #{user.displayName}
+                    | Young Kim
                 #friendChat(onclick = 'location.href=\'/\';')
                     | 친구와 채팅
                 #userChat(onclick = 'location.href=\'/randomChat\';')
@@ -117,4 +117,5 @@ html
         #right
             img(src='/images/right.png')
         script(src='//cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-infinite.min.js')
-        script(src='/javascripts/friendChat.js')
+        script(src='/javascripts/util.js')
+        script(src='/javascripts/chat_socket.js')

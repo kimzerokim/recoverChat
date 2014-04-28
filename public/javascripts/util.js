@@ -1,5 +1,5 @@
 //chatRoom picture Change
-var pictuerChange = (function () {
+var pictureChange = (function () {
     var myPicture = function () {
         var myMessage = document.getElementsByClassName('myMessage'),
             myMessageLength = myMessage.length,
@@ -64,6 +64,7 @@ var buttonToggle = (function () {
     }
 })();
 
+//for chatField resize
 var dynamicResize = (function () {
     var changeChatFieldHeight = function () {
         var chatField = document.getElementById('chatContainer');
@@ -81,6 +82,6 @@ var dynamicResize = (function () {
 (function () {
     dynamicResize.changeChatFieldHeight();
     buttonToggle.addEvent();
-    pictuerChange.my();
+    pictureChange.my();
     window.onresize = dynamicResize.changeChatFieldHeight;
 })();

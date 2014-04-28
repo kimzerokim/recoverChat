@@ -7,7 +7,8 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     app = express(),
-    server = http.createServer(app);
+    server = http.createServer(app),
+    io = require('socket.io').listen(server);
 
 // app environments
 app.configure(function () {
@@ -86,4 +87,9 @@ server.listen(app.get('port'), function () {
     console.log('\n///////////////////////////////////////////////\n' +
         '//// Express server listening on port ' + app.get('port') + ' ////' +
         '\n///////////////////////////////////////////////\n');
+});
+
+//for io function
+io.sockets.on('connection', function (socket) {
+    app.get('/', ensureAuthenticated, routes.friendChat(socket));
 });

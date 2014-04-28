@@ -3,7 +3,7 @@
  */
 
 
-var init = function(app) {
+var init = function (app) {
     var pkginfo = require('../package');
     var passport = require('passport');
 
@@ -38,9 +38,7 @@ var init = function(app) {
     }));
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['read_stream', 'publish_actions'] }));
-    app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        failureRedirect: '/welcome'
-    }), function (req, res) {
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/welcome'}), function (req, res) {
         res.redirect('/');
     });
     app.get('/logout', function (req, res) {

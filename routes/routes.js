@@ -1,7 +1,13 @@
 var facebookInfo = require('../routes/facebookInfo');
 
-exports.friendChat = function (req, res) {
-    res.render('friendChat', { user: req.user });
+exports.friendChat = function (socket) {
+    return function (req, res) {
+        {
+            var userSelf = req.user,
+                userOther;
+            res.render('friendChat', { user: req.user });
+        }
+    }
 };
 
 exports.randomChat = function (req, res) {
