@@ -78,10 +78,113 @@ var dynamicResize = (function () {
     }
 })();
 
+//for chatInputFunction
+var chatInputFunction = (function () {
+    var chatInsert = function (isSelf) {
+        var XSSfilter = function (content) {
+            return content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        };
+
+        //find Dom element
+        var rowChatInputText = document.getElementById('chatInput').value,
+            messageField = document.getElementById('messages'),
+            chatInputText = XSSfilter(rowChatInputText);
+
+        if (rowChatInputText === "") {
+            return;
+        }
+
+        //create HTML element
+        var messageFragment = document.createDocumentFragment(),
+            articleMessage = document.createElement('article'),
+            profileDiv = document.createElement('div'),
+            blockDiv = document.createElement('div'),
+            textSpan = document.createElement('span');
+
+        //add class by author
+        if (isSelf) {
+            articleMessage.className = 'myMessage';
+        }
+        else {
+            articleMessage.className = 'otherMessage';
+        }
+
+        //add class property
+        profileDiv.className = 'profile';
+        blockDiv.className = 'block';
+        textSpan.innerText = chatInputText;
+
+        //add Value
+        blockDiv.appendChild(textSpan);
+        articleMessage.appendChild(profileDiv);
+        articleMessage.appendChild(blockDiv);
+        messageFragment.appendChild(articleMessage);
+
+        //add messageField
+        messageField.appendChild(messageFragment);
+
+        //change profile picture
+        pictureChange.my();
+
+        //reset TextFieldValue
+        document.getElementById('chatInput').value = '';
+
+        //move scroll to latest chat (to bottom)
+        var chatField = document.getElementById("messages");
+        chatField.scrollTop = chatField.scrollHeight;
+
+    };
+
+    var chatEvent = function(isSelf) {
+
+    };
+
+    // addEvent
+    var addEvent = {
+        clickSend: function () {
+            var isSelf = true,
+                chatSendButton = document.getElementById('chatSend');
+
+            //to pass parameter at addEventListener
+            chatSendButton.addEventListener("click", function () {
+                chatInsert(isSelf);
+            }, true);
+        },
+
+        enterSend: function () {
+            var chatInput = document.getElementById('chatInput'),
+                isSelf = true;
+
+            chatInput.onkeypress = function (event) {
+                event = event || window.event;
+                if (event.keyCode === 13) {
+                    chatInsert(isSelf);
+                }
+            }
+        }
+    };
+
+    return {
+        input: chatInsert,
+        addEvent: addEvent
+    }
+})();
+
 //execute when loaded
 (function () {
+    //resize chatField
     dynamicResize.changeChatFieldHeight();
+
+    //popup chatMenu
     buttonToggle.addEvent();
+
+    //sendChatFunction
+    //set user picture when window loaded
     pictureChange.my();
+    //add chatFunction event
+    chatInputFunction.addEvent.clickSend();
+    chatInputFunction.addEvent.enterSend();
+
+    //resize chatField
     window.onresize = dynamicResize.changeChatFieldHeight;
 })();

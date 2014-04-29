@@ -1,0 +1,31 @@
+#friendChat {
+    width: 90px;
+    height: 36px;
+    background-color: #55AA9F;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin: 7px 12px 0 0;
+    cursor: pointer;
+    color : #f4f4f4;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 36px;
+    text-align: center;
+    float: right;
+}
+
+#userChat {
+    width: 90px;
+    height: 36px;
+    background-color: #30605a;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin: 7px 10px 0 0;
+    cursor: pointer;
+    color : #f4f4f4;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 36px;
+    text-align: center;
+    float: right;
+}

@@ -80,7 +80,7 @@ app.get('/', ensureAuthenticated, routes.friendChat);
 app.get('/randomChat', ensureAuthenticated, routes.randomChat);
 app.get('/welcome', routes.welcome);
 app.get('/contact', routes.contact);
-app.get('/testchat', routes.friendChat);
+app.get('/test', routes.friendChat);
 app.get('/randomChatTest', routes.randomChat);
 
 server.listen(app.get('port'), function () {

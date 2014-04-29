@@ -6,7 +6,8 @@ html
         link(rel='icon', type ='image/x-icon',href='/images/favicon.ico')
         title
             | Recover
-        link(href='/stylesheets/friendChat.css', rel='stylesheet', type='text/css')
+        link(href='/stylesheets/chat.css', rel='stylesheet', type='text/css')
+        link(href='/stylesheets/friend.css', rel='stylesheet', type='text/css')
     body
         //#title
         //    | #{user.id}
@@ -117,5 +118,5 @@ html
         #right
             img(src='/images/right.png')
         script(src='//cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-infinite.min.js')
-        script(src='/javascripts/util.js')
         script(src='/javascripts/chat_socket.js')
+        script(src='/javascripts/util.js')
