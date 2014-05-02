@@ -2,7 +2,6 @@
  * Created by YoungKim on 2014. 4. 13..
  */
 
-
 var init = function (app) {
     var pkginfo = require('../package');
     var passport = require('passport');

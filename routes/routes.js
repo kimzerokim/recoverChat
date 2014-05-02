@@ -1,10 +1,44 @@
-var facebookInfo = require('../routes/facebookInfo');
+var facebookInfo = require('./facebookInfo');
+
+var mysql = require('mysql'),
+    mysqlConfig = require('./mysqlConfig').returnInfo(),
+    mysqlConn = mysql.createConnection(mysqlConfig);
 
 exports.friendChat = function (req, res) {
+    var curUser = req.user,
+        userInfo = {
+            id: curUser.id,
+            displayname: curUser.displayname,
+            username: curUser.username,
+            gender: curUser.gender
+        };
+
+    //check, register
+    mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
+        if (err)
+            res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+        else {
+            if (result.length === 0) {
+                mysqlConn.query('INSERT INTO user SET ?', userInfo, function (err) {
+                    if (err)
+                        res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+                });
+            }
+            else
+                return;
+        }
+    });
+
+    facebookInfo.getFbData(req.user.auth, '/me/friends', function(data) {
+        console.log(data);
+    });
+
     res.render('friendChat', { user: req.user });
 };
 
 exports.randomChat = function (req, res) {
+    var curUser = req.user;
+
     res.render('randomChat', { user: req.user });
 };
 
