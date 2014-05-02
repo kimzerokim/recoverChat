@@ -8,7 +8,7 @@ exports.friendChat = function (req, res) {
     var curUser = req.user,
         userInfo = {
             id: curUser.id,
-            displayname: curUser.displayname,
+            displayname: curUser.displayName,
             username: curUser.username,
             gender: curUser.gender
         };
@@ -29,7 +29,7 @@ exports.friendChat = function (req, res) {
         }
     });
 
-    facebookInfo.getFbData(req.user.auth, '/me/friends', function(data) {
+    facebookInfo.getFbData(req.session.access, '/me/friends', function(data) {
         console.log(data);
     });
 
