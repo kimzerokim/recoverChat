@@ -29,7 +29,7 @@ exports.friendChat = function (req, res) {
         }
     });
 
-    facebookInfo.getFbData(req.session.access, '/me/friends', function(data) {
+    facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function(data) {
         console.log(data);
     });
 

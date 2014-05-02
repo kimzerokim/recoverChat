@@ -35,14 +35,13 @@ var init = function (app) {
         //
         process.nextTick(function () {
             accessToken_catch = accessToken;
-            console.log(accessToken_catch);
             return done(null, profile);
         });
     }));
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['read_stream', 'publish_actions'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/welcome'}), function (req, res) {
-        req.session.access = accessToken_catch;
+        req.session.catch_accessToken = accessToken_catch;
         res.redirect('/');
     });
     app.get('/logout', function (req, res) {
@@ -51,7 +50,7 @@ var init = function (app) {
         // req.session.passport 의 정보를 삭제한다.
         //
         req.logout();
-        req.session.access = undefined;
+        req.session.catch_accessToken = undefined;
         res.redirect('/');
     });
 };

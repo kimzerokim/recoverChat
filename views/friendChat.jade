@@ -22,9 +22,11 @@ html
         #chatServiceStatus
             #userInfo
                 #userPic
-                    img(src = 'images/Anonyprofile.png')
+                    img(src = '#{user.photos[0].value}')
                 #userName
-                    | Young Kim
+                    | #{user.displayName}
+                #logout(onclick = 'location.href=\'/logout\';')
+                    | 로그아웃
                 #friendChat(onclick = 'location.href=\'/\';')
                     | 친구와 채팅
                 #userChat(onclick = 'location.href=\'/randomChat\';')
