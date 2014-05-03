@@ -1,40 +1,47 @@
 var init = function (app, io) {
-    //Fisher–Yates shuffle
-    var shuffleArray = function (array) {
-        var arrayLen = array.length;
-        for (var i = 0; i < arrayLen; i++) {
-            var k = n + Math.floor(Math.random() * (arrayLen - n));
-            var temp = array[k];
-            array[k] = array[n];
-            array[n] = temp;
-        }
-    };
-
+    //pick two element randomly
     var pickTwoElement = function (object) {
-        var keys = [],
-            firstElement,
-            secondElement;
+        var firstElement,
+            firstKey,
+            secondElement,
+            secondKey,
+            count = 0;
 
-        for (var key in object) {
-            if (object.hasOwnProperty(key)) {
-                keys.push(key);
+        //pick first value
+        for (var prop in object) {
+            if (Math.random() < 1 / ++count) {
+                firstKey = prop;
             }
         }
+        firstElement = object[firstKey];
+        delete object[firstKey];
+        count = 0;
 
-        //shuffle keys array
-        shuffleArray(keys);
-
-        firstElement = object[keys[0]];
-        secondElement = object[keys[1]];
-
-        //delete object property
-        delete object[keys[0]];
-        delete object[keys[1]];
+        //pick second value
+        for (prop in object) {
+            if (Math.random() < 1 / ++count) {
+                secondKey = prop;
+            }
+        }
+        secondElement = object[secondKey];
+        delete object[secondKey];
 
         return {firstClient: firstElement, secondClient: secondElement};
     };
 
+    //return object length
+    var getObjectLen = function(object) {
+        var count = 0;
+        for (var prop in object) {
+            if (object.hasOwnProperty(prop)) {
+                count++;
+            }
+        }
+        return count;
+    };
+
     var randomChatWaitUser = {};
+    var randomChatRoom = {};
 
     io.sockets.on('connection', function (socket) {
         //////////////////////////
@@ -48,13 +55,15 @@ var init = function (app, io) {
             //랜덤채팅에 들어온 유저들을 저장한다.
             randomChatWaitUser[userId] = userId;
 
-            if (randomChatWaitUser.length <= 1) {
+            var randomChatWaitUserCount = getObjectLen(randomChatWaitUser);
+
+            if (randomChatWaitUserCount <= 1) {
                 socket.emit('waitingForMatch');
             }
             else {
-                //랜덤채팅을 기다리는 사용자들을 섞어준다.
-                shuffle(randomChatWaitUser);
+                //랜덤채팅을 기다리는 사용자들을 같은 방에 넣어준다.
                 var newRandomChatClient = pickTwoElement(randomChatWaitUser);
+
             }
         });
     });
