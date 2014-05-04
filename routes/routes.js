@@ -13,7 +13,7 @@ exports.friendChat = function (req, res) {
             gender: curUser.gender
         };
 
-    //check, register
+    //check, register user
     mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
         if (err)
             res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
@@ -24,8 +24,6 @@ exports.friendChat = function (req, res) {
                         res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
                 });
             }
-            else
-                return;
         }
     });
 

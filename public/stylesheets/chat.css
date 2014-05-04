@@ -220,7 +220,7 @@ body {
 #findFriend {
     width: 34%;
     height: 40px;
-    border: 0px solid transparent;
+    border: 0 solid transparent;
     -webkit-border-radius: 2px;
     border-radius: 2px;
     background-color: #b2b2b2;
@@ -234,7 +234,7 @@ body {
 #leaveChat {
     width: 34%;
     height: 40px;
-    border: 0px solid transparent;
+    border: 0 solid transparent;
     -webkit-border-radius: 2px;
     border-radius: 2px;
     background-color: #b2b2b2;
@@ -247,7 +247,7 @@ body {
 
 #chatBar {
     position: absolute;
-    bottom: 0%;
+    bottom: 0;
     width: 100%;
     height: 40px;
     -webkit-border-radius: 0 0 4px 4px;
@@ -256,7 +256,7 @@ body {
 
 #chatMenu {
     float: left;
-    left: 0%;
+    left: 0;
     width: 9%;
     height: 40px;
     -webkit-border-radius: 0 0 0 4px;
@@ -309,4 +309,8 @@ body {
     width: 220px;
     left: 50%;
     margin: 13px 0 10px -106px;
+}
+
+#userId {
+    display: none;
 }

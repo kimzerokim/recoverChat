@@ -1,9 +1,14 @@
 //chatRoom picture Change
 var pictureChange = (function () {
-    var myPicture = function () {
+    var myPictureChange = function () {
         var myMessage = document.getElementsByClassName('myMessage'),
             myMessageLength = myMessage.length,
-            myPicture = userPic = document.getElementById('userPic').innerHTML;
+            myPicture;
+        // set curUserPicture (prevent Error)
+        if (document.getElementById('userPic').innerHTML)
+            myPicture = document.getElementById('userPic').innerHTML;
+        else
+            myPicture = "<img src = \"images/Anonyprofile.png\">";
 
         for (var i = 0; i < myMessageLength; i++) {
             myMessage[i].firstChild.innerHTML = myPicture;
@@ -14,18 +19,17 @@ var pictureChange = (function () {
         var otherMessage = document.getElementsByClassName('otherMessage'),
             otherMessageLength = otherMessage.length;
         for (var j = 0; j < otherMessageLength; j++) {
-
         }
     };
 
     return {
-        my: myPicture,
+        my: myPictureChange,
         other: otherPicture
     }
 })();
 
-//for chatMenu buttonToggle
-var buttonToggle = (function () {
+//for chatMenu
+var button = (function () {
     var menuPopup = function () {
         var info = document.getElementById('info'),
             chatInfo = document.getElementById('chatInfo'),
@@ -48,6 +52,18 @@ var buttonToggle = (function () {
 
     };
 
+    //chatCount
+    var chatCount = function () {
+        var chatTimeDiv = document.getElementById('chatTimeInfo'),
+            chatTime = 0;
+
+        // increase chatTime
+        setInterval(function () {
+            chatTime++;
+            chatTimeDiv.innerHTML = chatTime + '분 째 채팅 중!';
+        }, 60 * 1000);
+    };
+
     // addEvent
     var addEvent = function () {
         var chatMenuButton = document.getElementById('chatMenu'),
@@ -57,6 +73,9 @@ var buttonToggle = (function () {
         info.style.display = 'none';
         chatInfo.style.display = 'none';
         chatMenuButton.addEventListener('click', menuPopup, true);
+
+        //start chatCount
+        chatCount();
     };
 
     return {
@@ -135,7 +154,7 @@ var chatInputFunction = (function () {
 
     };
 
-    var chatEvent = function(isSelf) {
+    var chatEvent = function (isSelf) {
 
     };
 
@@ -170,13 +189,14 @@ var chatInputFunction = (function () {
     }
 })();
 
+
 //execute when loaded
 (function () {
     //resize chatField
     dynamicResize.changeChatFieldHeight();
 
     //popup chatMenu
-    buttonToggle.addEvent();
+    button.addEvent();
 
     //sendChatFunction
     //set user picture when window loaded

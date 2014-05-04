@@ -19,6 +19,8 @@ var init = function (app) {
 
     var FacebookStrategy = require('passport-facebook').Strategy;
 
+    // 엑세스토큰을 가로채올 변수를 만들어준다. 내가 직접 만들어 관리하는 변수라 조심히 다룰 것.
+    // 현재는 로그아웃하였을 경우 사라지게끔 만들어놓아서 엄청 위험하진 않다.
     var accessToken_catch;
 
     passport.use(new FacebookStrategy({

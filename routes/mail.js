@@ -52,5 +52,6 @@ exports.sendMail = function (req, res) {
     });
 
     //message 페이지 만들어놓기.
-    res.render('message', {message: "감사합니다"});
+    //res.render('message', {message: "감사합니다"});
+    res.redirect('/');
 };

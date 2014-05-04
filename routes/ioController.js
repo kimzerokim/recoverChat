@@ -61,9 +61,24 @@ var init = function (app, io) {
                 socket.emit('waitingForMatch');
             }
             else {
-                //랜덤채팅을 기다리는 사용자들을 같은 방에 넣어준다.
-                var newRandomChatClient = pickTwoElement(randomChatWaitUser);
+                //랜덤채팅을 기다리는 사용자중 두 명을 랜덤으로 추출한다. (꼭 자신이 뽑히지 않아도 된다. 지금 새로 추가되는건 트리거일 뿐.)
+                var newRandomChatClient = pickTwoElement(randomChatWaitUser),
+                    client_1 = newRandomChatClient['firstClient'],
+                    client_2 = newRandomChatClient['secondClient'];
 
+                //두 클라이언트에 해당하는 소켓에게 새로운 방에 들어가라는 요청을 보낸다.
+                io.sockets.in(client_1).emit('randomChatEnterEmptyRoom', client_1, client_2);
+                io.sockets.in(client_2).emit('randomChatEnterEmptyRoom', client_2, client_1);
+            }
+        });
+
+        socket.on('randomChatEnterRoom', function(userId, randomChatRoom) {
+            //지금 요청이 들어온 소켓이 그 소켓이 맞는지 확인한다.
+            if (socket.room === userId) {
+                socket.leave(socket.room);
+                socket.room = randomChatRoom;
+                socket.join(randomChatRoom);
+                io.sockets.in(randomChatRoom).emit('randomChatMatched');
             }
         });
     });
