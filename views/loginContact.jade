@@ -19,11 +19,11 @@ html
                             | 개선사항 및 서비스 문의
                         form.writeMail(method ='post', role='form', action = '/contact/add')
                             textarea#mailTextArea.simple(rows='3', type='text', name='mailBody')
-                            input(type = 'hidden', name = 'id', value ='#')
-                            input(type = 'hidden', name = 'displayName', value ='#')
-                            input(type = 'hidden', name = 'username', value ='#')
-                            input(type = 'hidden', name = 'gender', value ='#')
-                            input(type = 'hidden', name = 'photo', value ='#')
+                            input(type = 'hidden', name = 'id', value = '#{user.id}')
+                            input(type = 'hidden', name = 'displayName', value = '#{user.displayName}')
+                            input(type = 'hidden', name = 'username', value = '#{user.username}')
+                            input(type = 'hidden', name = 'gender', value = '#{user.gender}')
+                            input(type = 'hidden', name = 'photo', value = '#{user.photos[0].value}')
                             .form-actions
                                 button#mailButton.btn.btn-default(type='submit')  의견 보내기
         #right

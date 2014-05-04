@@ -49,6 +49,10 @@ exports.welcome = function (req, res) {
     }
 };
 
-exports.contact = function (req, res) {
-    res.render('contact');
+exports.loginContact = function (req, res) {
+    res.render('contact', {user : req.user});
 };
+
+exports.contact = function(req,res) {
+    res.render('contact');
+}

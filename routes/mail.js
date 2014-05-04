@@ -18,14 +18,6 @@ var smtpTransport = nodemailer.createTransport("SMTP", {
 });
 
 exports.sendMail = function (req, res) {
-    var curUserInfo = {
-        id: req.user.id,
-        displayName: req.user.displayName,
-        userName: req.user.username,
-        gender: req.user.gender,
-        photo: req.user.photos[0].value
-    };
-
     var body = req.body.mailBody;
 
     // setup e-mail data with unicode symbols
@@ -35,8 +27,13 @@ exports.sendMail = function (req, res) {
         subject: "고객 피드백", // Subject line
         text: "고객 피드백", // plaintext body
         html: "<b>고객피드백</b>"
-            + "<br/><br/>고객정보 :<br/><br/>" + curUserInfo
-            + "<br/><br/>피드백 내용 :<br/><br/>" + body
+            + "<br/><br/>고객정보 :<br/>"
+            + "<br/>id : " + req.body.id + "<br/>"
+            + "<br/>displayName : " + req.body.displayName + "<br/>"
+            + "<br/>username : " + req.body.username + "<br/>"
+            + "<br/>gender : " + req.body.gender + "<br/>"
+            + "<br/>photo : " + "<img src = \"req.body.photo\"/>" + "<br/>"
+            + "<br/><b>피드백 내용 :</b><br/><br/>" + body
     };
 
     // send mail with defined transport object
