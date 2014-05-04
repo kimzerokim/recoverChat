@@ -59,7 +59,12 @@ if (cluster.isMaster) {
         //app.use(express.cookieDecoder());
         app.use(express.bodyParser());
         app.use(express.cookieParser());
-        app.use(express.session({ secret: "keyboard cat" }));
+        app.use(express.session({ secret: "recoverChatting",
+            cookie: { secure: true },
+            store: new RedisStore({
+                host: 'localhost',
+                port: 6379,
+                client: redis })}));
         app.use(express.methodOverride());
         app.use(express.compress());
 
