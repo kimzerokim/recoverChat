@@ -112,13 +112,20 @@ if (cluster.isMaster) {
         res.redirect('/welcome');
     }
 
+    function contactRoute(req, res, next) {
+        if (req.isAuthenticated()) {
+            return next();
+        }
+        res.redirect('/contact');
+    }
+
     app.get('/', ensureAuthenticated, routes.friendChat);
     app.get('/randomChat', ensureAuthenticated, routes.randomChat);
     app.get('/welcome', routes.welcome);
 
     // mail send function
     var mail = require('./routes/mail');
-    app.get('/contact/login', routes.loginContact);
+    app.get('/contact/login', contactRoute, routes.loginContact);
     app.get('/contact', routes.contact);
     app.post('/contact/add', mail.sendMail);
 
