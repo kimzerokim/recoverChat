@@ -9,7 +9,8 @@ var express = require('express'),
     sio = require('socket.io'),
     ioController = require('./routes/ioController'),
     redis = require('socket.io/node_modules/redis'),
-    cluster = require('cluster');
+    cluster = require('cluster'),
+    RedisStore = require('connect-redis')(express);
 
 /////////////////
 ///// useCluster
@@ -30,7 +31,7 @@ if (cluster.isMaster) {
         server = http.createServer(app),
         io = sio.listen(server);
 
-    // io configurationrs
+    // io configuration
     io.configure(function () {
         io.set('log level', 1);
         io.set('transports', [
@@ -59,12 +60,7 @@ if (cluster.isMaster) {
         //app.use(express.cookieDecoder());
         app.use(express.bodyParser());
         app.use(express.cookieParser());
-        app.use(express.session({ secret: "recoverChatting",
-            cookie: { secure: true },
-            store: new RedisStore({
-                host: 'localhost',
-                port: 6379,
-                client: redis })}));
+        app.use(express.session({ secret: "recoverChatting", store: new RedisStore(), cookie: {secure: true}}));
         app.use(express.methodOverride());
         app.use(express.compress());
 
