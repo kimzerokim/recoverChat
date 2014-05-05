@@ -15,7 +15,8 @@
     "fbgraph": "^0.2.10",
     "mysql": "^2.2.0",
     "nodemailer": "^0.6.3",
-    "connect-redis": "1.4.7"
+    "connect-redis": "~1.4.7",
+    "redis": "^0.10.1"
   },
   "oauth": {
     "facebook": {

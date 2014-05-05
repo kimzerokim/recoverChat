@@ -8,7 +8,7 @@ var express = require('express'),
     path = require('path'),
     sio = require('socket.io'),
     ioController = require('./routes/ioController'),
-    redis = require('socket.io/node_modules/redis'),
+    redis = require('redis'),
     cluster = require('cluster'),
     RedisStore = require('connect-redis')(express);
 
@@ -18,9 +18,9 @@ var express = require('express'),
 var numCPUs = require('os').cpus().length;
 
 // for redis setting
-var pub = redis.createClient();
-var sub = redis.createClient();
-var client = redis.createClient();
+var pub = redis.createClient(6379, 'localhost');
+var sub = redis.createClient(6379, 'localhost');
+var client = redis.createClient(6379, 'localhost');
 
 if (cluster.isMaster) {
     for (var i = 0; i < numCPUs; i++) {
@@ -42,7 +42,7 @@ if (cluster.isMaster) {
             , 'jsonp-polling'
         ]);
         io.set('store', new sio.RedisStore({
-                redisPub: pub, redisSub: sub, redisClient: client
+                redis: redis, redisPub: pub, redisSub: sub, redisClient: client
             }
         ));
     });
@@ -53,19 +53,24 @@ if (cluster.isMaster) {
         app.set('views', path.join(__dirname, 'views'));
         app.set('view engine', 'jade');
         app.set('view option', { layout: false });
-        app.use(express.favicon());
         app.use(express.logger('dev'));
         app.use(express.json());
         app.use(express.urlencoded());
         //app.use(express.cookieDecoder());
         app.use(express.bodyParser());
-        app.use(express.cookieParser());
-        app.use(express.session({ secret: "recoverChatting", store: new RedisStore(), cookie: {secure: true}}));
-        app.use(express.methodOverride());
-        app.use(express.compress());
-
+        app.use(express.cookieParser('recover'));
+        app.use(express.session({
+            secret: 'recoverChatting',
+            store: new RedisStore({client: client}),
+            cookie: {
+                maxAge: 7 * 24 * 60 * 60 * 1000 // one week
+            }
+        }));
         //configure passport-facebook
         require('./routes/facebookOAuth')(app);
+
+        app.use(express.methodOverride());
+        app.use(express.compress());
 
         app.use(app.router);
         // Since this is the last non-error-handling
