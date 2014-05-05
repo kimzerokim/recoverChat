@@ -50,7 +50,7 @@ exports.welcome = function (req, res) {
 };
 
 exports.loginContact = function (req, res) {
-    res.render('contact', {user : req.user});
+    res.render('loginContact', {user : req.user});
 };
 
 exports.contact = function(req,res) {

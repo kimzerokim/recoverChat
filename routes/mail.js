@@ -32,7 +32,7 @@ exports.sendMail = function (req, res) {
             + "<br/>displayName : " + req.body.displayName + "<br/>"
             + "<br/>username : " + req.body.username + "<br/>"
             + "<br/>gender : " + req.body.gender + "<br/>"
-            + "<br/>photo : " + "<img src = \"req.body.photo\"/>" + "<br/>"
+            + "<br/>photo : <img src = " + req.body.photo + "/><br/>"
             + "<br/><b>피드백 내용 :</b><br/><br/>" + body
     };
 
