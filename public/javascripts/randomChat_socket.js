@@ -3,9 +3,9 @@ var socketFunction = (function () {
     var userId = document.getElementById('userId').value;
 
     // catch Error
-    if (userId === undefined || userId === null)
-        window.location = "/welcome";
-    else {
+//    if (userId === undefined || userId === null)
+//        window.location = "/welcome";
+//    else {
         //socket connect with server
         socket.on('connect', function () {
             socket.emit('randomChatConnected', userId);
@@ -40,7 +40,7 @@ var socketFunction = (function () {
                 socket.emit('randomChatEnteredRoom', userId, randomChatRoom);
             }
         });
-    }
+//   }
 })();
 //
 ////can't access from client console

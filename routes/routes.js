@@ -16,12 +16,14 @@ exports.friendChat = function (req, res) {
     //check, register user
     mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
         if (err)
-            res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+        //res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+            console.log(err);
         else {
             if (result.length === 0) {
                 mysqlConn.query('INSERT INTO user SET ?', userInfo, function (err) {
                     if (err)
-                        res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+                    //res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+                        console.log(err);
                 });
             }
         }
