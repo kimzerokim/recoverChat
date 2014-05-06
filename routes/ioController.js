@@ -52,16 +52,16 @@ var init = function (app, io) {
             socket.room = userId;
             socket.join(userId);
 
-            console.log(userId);
+            console.log("현재 유저 " + userId);
 
             //랜덤채팅에 들어온 유저들을 저장한다.
             randomChatWaitUser[userId] = userId;
 
-            console.log(randomChatRoom);
+            console.log("기다리는 사용자들 " + randomChatWaitUser);
 
             var randomChatWaitUserCount = getObjectLen(randomChatWaitUser);
 
-            console.log(randomChatWaitUserCount);
+            console.log("기다리는 사용자 수 " + randomChatWaitUserCount);
 
             if (randomChatWaitUserCount <= 1) {
                 socket.emit('waitingForMatch');
@@ -86,8 +86,8 @@ var init = function (app, io) {
                     }
                 }
 
-                console.log(client_1);
-                console.log(client_2);
+                console.log("매칭클라1 " + client_1);
+                console.log("매칭클라2 " + client_2);
 
                 //두 클라이언트에 해당하는 소켓에게 새로운 방에 들어가라는 요청을 보낸다.
                 io.sockets.in(client_1).emit('randomChatEnterEmptyRoom', client_1, client_2);
@@ -101,7 +101,7 @@ var init = function (app, io) {
                 socket.leave(socket.room);
                 socket.room = randomChatRoom;
                 socket.join(randomChatRoom);
-                io.sockets.in(randomChatRoom).emit('randomChatMatched');
+                io.sockets.in(randomChatRoom).emit('randomChatMatched', userId, randomChatRoom);
             }
         });
     });
