@@ -27,8 +27,8 @@ exports.friendChat = function (req, res) {
         }
     });
 
-    facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function(data) {
-        console.log(data);
+    facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
+        req.session.firendList = data;
     });
 
     res.render('friendChat', { user: req.user });
@@ -50,9 +50,9 @@ exports.welcome = function (req, res) {
 };
 
 exports.loginContact = function (req, res) {
-    res.render('loginContact', {user : req.user});
+    res.render('loginContact', {user: req.user});
 };
 
-exports.contact = function(req,res) {
+exports.contact = function (req, res) {
     res.render('contact');
 }

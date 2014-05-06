@@ -52,7 +52,7 @@ var init = function (app) {
         // req.session.passport 의 정보를 삭제한다.
         //
         req.logout();
-        req.session.catch_accessToken = undefined;
+        req.session.catch_accessToken = null;
         res.redirect('/');
     });
 };

@@ -30,7 +30,7 @@ var init = function (app, io) {
     };
 
     //return object length
-    var getObjectLen = function(object) {
+    var getObjectLen = function (object) {
         var count = 0;
         for (var prop in object) {
             if (object.hasOwnProperty(prop)) {
@@ -52,10 +52,16 @@ var init = function (app, io) {
             socket.room = userId;
             socket.join(userId);
 
+            console.log(userId);
+
             //랜덤채팅에 들어온 유저들을 저장한다.
             randomChatWaitUser[userId] = userId;
 
+            console.log(randomChatRoom);
+
             var randomChatWaitUserCount = getObjectLen(randomChatWaitUser);
+
+            console.log(randomChatWaitUserCount);
 
             if (randomChatWaitUserCount <= 1) {
                 socket.emit('waitingForMatch');
@@ -66,13 +72,30 @@ var init = function (app, io) {
                     client_1 = newRandomChatClient['firstClient'],
                     client_2 = newRandomChatClient['secondClient'];
 
+                //지금 여러 세션에서 일어날 수 있는 중복은 고려하지 않고 있는데, 뽑힌 두 엘리먼트가 같으면 다시 추출하게 한다.
+                //추후에는 재귀적으로 결과가 중복되지 않게 하는 것이 중요하다.
+                if (client_1 === client_2) {
+                    randomChatWaitUser[client_1] = client_1;
+                    if (randomChatWaitUserCount <= 1) {
+                        socket.emit('waitingForMatch');
+                    }
+                    else {
+                        newRandomChatClient = pickTwoElement(randomChatWaitUser);
+                        client_1 = newRandomChatClient['firstClient'];
+                        client_2 = newRandomChatClient['secondClient'];
+                    }
+                }
+
+                console.log(client_1);
+                console.log(client_2);
+
                 //두 클라이언트에 해당하는 소켓에게 새로운 방에 들어가라는 요청을 보낸다.
                 io.sockets.in(client_1).emit('randomChatEnterEmptyRoom', client_1, client_2);
                 io.sockets.in(client_2).emit('randomChatEnterEmptyRoom', client_2, client_1);
             }
         });
 
-        socket.on('randomChatEnterRoom', function(userId, randomChatRoom) {
+        socket.on('randomChatEnterRoom', function (userId, randomChatRoom) {
             //지금 요청이 들어온 소켓이 그 소켓이 맞는지 확인한다.
             if (socket.room === userId) {
                 socket.leave(socket.room);
