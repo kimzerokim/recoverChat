@@ -1,5 +1,5 @@
 var socketFunction = (function () {
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://www.skkuleaf.com:3000');
     var userId = document.getElementById('userId').value;
 
     // catch Error
@@ -9,6 +9,8 @@ var socketFunction = (function () {
         //socket connect with server
         socket.on('connect', function () {
             socket.emit('randomChatConnected', userId);
+            console.log('connect with server');
+            console.log(userId);
         });
 
         socket.on('waitingForMatch', function () {
@@ -40,8 +42,8 @@ var socketFunction = (function () {
         });
     }
 })();
-
-//can't access from client console
-var chatCount = (function () {
-
-})();
+//
+////can't access from client console
+//var chatCount = (function () {
+//
+//})();
