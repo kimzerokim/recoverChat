@@ -74,17 +74,7 @@ var init = function (app, io) {
 
                 //지금 여러 세션에서 일어날 수 있는 중복은 고려하지 않고 있는데, 뽑힌 두 엘리먼트가 같으면 다시 추출하게 한다.
                 //추후에는 재귀적으로 결과가 중복되지 않게 하는 것이 중요하다.
-                if (client_1 === client_2) {
-                    randomChatWaitUser[client_1] = client_1;
-                    if (randomChatWaitUserCount <= 1) {
-                        socket.emit('waitingForMatch');
-                    }
-                    else {
-                        newRandomChatClient = pickTwoElement(randomChatWaitUser);
-                        client_1 = newRandomChatClient['firstClient'];
-                        client_2 = newRandomChatClient['secondClient'];
-                    }
-                }
+                // -> 키값의 중복으로 인해 이러한 일이 일어나지 않음을 확인했다.
 
                 console.log("매칭클라1 " + client_1);
                 console.log("매칭클라2 " + client_2);
@@ -95,7 +85,7 @@ var init = function (app, io) {
             }
         });
 
-        socket.on('randomChatEnterRoom', function (userId, randomChatRoom) {
+        socket.on('randomChatChangeAndEnterRoom', function (userId, randomChatRoom) {
             //지금 요청이 들어온 소켓이 그 소켓이 맞는지 확인한다.
             if (socket.room === userId) {
                 socket.leave(socket.room);

@@ -35,9 +35,11 @@ var socketFunction = (function () {
 
         randomChatRoom = bigId + 'random' + smallId;
 
+        console.log("내가 접속해야 할 방은 " + randomChatRoom);
+
         //check socket user id is correct
         if (self === userId) {
-            socket.emit('randomChatEnteredRoom', userId, randomChatRoom);
+            socket.emit('randomChatChangeAndEnterRoom', userId, randomChatRoom);
         }
     });
 
