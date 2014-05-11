@@ -29,6 +29,11 @@ var init = function (app, io) {
         return {firstClient: firstElement, secondClient: secondElement};
     };
 
+    //XSSfilter is working~
+    var XSSfilter = function (content) {
+        return content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    };
+
     //return object length
     var getObjectLen = function (object) {
         var count = 0;
@@ -93,6 +98,10 @@ var init = function (app, io) {
                 socket.join(randomChatRoom);
                 io.sockets.in(randomChatRoom).emit('randomChatMatched', userId, randomChatRoom);
             }
+        });
+
+        socket.on('randomChatMessageSend', function(data, userId, randomChatRoom) {
+            io.sockets.in(randomChatRoom).emit('randomChatMessageReceive', data, userId);
         });
     });
 };

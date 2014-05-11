@@ -52,18 +52,6 @@ var button = (function () {
 
     };
 
-    //chatCount
-    var chatCount = function () {
-        var chatTimeDiv = document.getElementById('chatTimeInfo'),
-            chatTime = 0;
-
-        // increase chatTime
-        setInterval(function () {
-            chatTime++;
-            chatTimeDiv.innerHTML = chatTime + '분 째 채팅 중!';
-        }, 60 * 1000);
-    };
-
     // addEvent
     var addEvent = function () {
         var chatMenuButton = document.getElementById('chatMenu'),
@@ -73,9 +61,6 @@ var button = (function () {
         info.style.display = 'none';
         chatInfo.style.display = 'none';
         chatMenuButton.addEventListener('click', menuPopup, true);
-
-        //start chatCount
-        chatCount();
     };
 
     return {
@@ -99,29 +84,23 @@ var dynamicResize = (function () {
 
 //for chatInputFunction
 var chatInputFunction = (function () {
-    var chatInsert = function (isSelf) {
-        var XSSfilter = function (content) {
-            return content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        };
+    //receive data and insert chatNode
+    socket.on('randomChatMessageReceive', function(data, userId) {
+        chatInsert(data, userId);
+    });
 
-        //find Dom element
-        var rowChatInputText = document.getElementById('chatInput').value,
-            messageField = document.getElementById('messages'),
-            chatInputText = XSSfilter(rowChatInputText);
-
-        if (rowChatInputText === "") {
-            return;
-        }
-
+    var chatInsert = function (data, userId) {
         //create HTML element
         var messageFragment = document.createDocumentFragment(),
             articleMessage = document.createElement('article'),
             profileDiv = document.createElement('div'),
             blockDiv = document.createElement('div'),
-            textSpan = document.createElement('span');
+            textSpan = document.createElement('span'),
+            messageField = document.getElementById('messages'),
+            curUserId = document.getElementById('userId').innerHTML;
 
         //add class by author
-        if (isSelf) {
+        if (curUserId === userId) {
             articleMessage.className = 'myMessage';
         }
         else {
@@ -131,7 +110,7 @@ var chatInputFunction = (function () {
         //add class property
         profileDiv.className = 'profile';
         blockDiv.className = 'block';
-        textSpan.innerText = chatInputText;
+        textSpan.innerText = data;
 
         //add Value
         blockDiv.appendChild(textSpan);
@@ -151,33 +130,43 @@ var chatInputFunction = (function () {
         //move scroll to latest chat (to bottom)
         var chatField = document.getElementById("messages");
         chatField.scrollTop = chatField.scrollHeight;
-
     };
 
-    var chatEvent = function (isSelf) {
+    var emitChatEvent = function (userId) {
+        var rowChatInputText = document.getElementById('chatInput').value,
+            curChatRoom = socketFunction.getChatRoom();
 
+        if (rowChatInputText === "") {
+            return;
+        }
+        if (curChatRoom === null || curChatRoom === undefined) {
+            alert('아직 연결이 되지 않았습니다.')
+        }
+        else {
+            socket.emit('randomChatMessageSend', rowChatInputText, userId, curChatRoom);
+        }
     };
 
     // addEvent
     var addEvent = {
         clickSend: function () {
-            var isSelf = true,
+            var userId = document.getElementById('userId').innerHTML,
                 chatSendButton = document.getElementById('chatSend');
 
             //to pass parameter at addEventListener
             chatSendButton.addEventListener("click", function () {
-                chatInsert(isSelf);
+                emitChatEvent(userId);
             }, true);
         },
 
         enterSend: function () {
             var chatInput = document.getElementById('chatInput'),
-                isSelf = true;
+                userId = document.getElementById('userId').innerHTML;
 
             chatInput.onkeypress = function (event) {
                 event = event || window.event;
                 if (event.keyCode === 13) {
-                    chatInsert(isSelf);
+                    emitChatEvent(userId);
                 }
             }
         }
