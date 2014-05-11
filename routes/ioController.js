@@ -46,7 +46,6 @@ var init = function (app, io) {
     };
 
     var randomChatWaitUser = {};
-    var randomChatRoom = {};
 
     io.sockets.on('connection', function (socket) {
         //////////////////////////
@@ -62,7 +61,7 @@ var init = function (app, io) {
             //랜덤채팅에 들어온 유저들을 저장한다.
             randomChatWaitUser[userId] = userId;
 
-            console.log("기다리는 사용자들 " + randomChatWaitUser);
+//            console.log("기다리는 사용자들 " + randomChatWaitUser);
 
             var randomChatWaitUserCount = getObjectLen(randomChatWaitUser);
 
@@ -100,8 +99,9 @@ var init = function (app, io) {
             }
         });
 
-        socket.on('randomChatMessageSend', function(data, userId, randomChatRoom) {
-            io.sockets.in(randomChatRoom).emit('randomChatMessageReceive', data, userId);
+        socket.on('randomChatMessageSend', function (data, userId, randomChatRoom) {
+            var XSSData = XSSfilter(data);
+            io.sockets.in(randomChatRoom).emit('randomChatMessageReceive', XSSData, userId);
         });
     });
 };

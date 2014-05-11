@@ -15,16 +15,18 @@ var pictureChange = (function () {
         }
     };
 
-    var otherPicture = function () {
+    var otherPictureChange_Anony = function () {
         var otherMessage = document.getElementsByClassName('otherMessage'),
-            otherMessageLength = otherMessage.length;
+            otherMessageLength = otherMessage.length,
+            anonyPicture = "<img src = \"images/Anonyprofile.png\">";
         for (var j = 0; j < otherMessageLength; j++) {
+            otherMessage[j].firstChild.innerHTML = anonyPicture;
         }
     };
 
     return {
         my: myPictureChange,
-        other: otherPicture
+        otherAnony: otherPictureChange_Anony
     }
 })();
 
@@ -85,7 +87,7 @@ var dynamicResize = (function () {
 //for chatInputFunction
 var chatInputFunction = (function () {
     //receive data and insert chatNode
-    socket.on('randomChatMessageReceive', function(data, userId) {
+    socket.on('randomChatMessageReceive', function (data, userId) {
         chatInsert(data, userId);
     });
 
@@ -99,30 +101,37 @@ var chatInputFunction = (function () {
             messageField = document.getElementById('messages'),
             curUserId = document.getElementById('userId').innerHTML;
 
+        var createChatNode = function () {
+            //add class property
+            profileDiv.className = 'profile';
+            blockDiv.className = 'block';
+            textSpan.innerText = data;
+
+            //add Value
+            blockDiv.appendChild(textSpan);
+            articleMessage.appendChild(profileDiv);
+            articleMessage.appendChild(blockDiv);
+            messageFragment.appendChild(articleMessage);
+
+            //add messageField
+            messageField.appendChild(messageFragment);
+        };
+
         //add class by author
         if (curUserId === userId) {
             articleMessage.className = 'myMessage';
+            createChatNode();
+
+            //change profile picture
+            pictureChange.my();
         }
         else {
             articleMessage.className = 'otherMessage';
+            createChatNode();
+
+            //change profile picture
+            pictureChange.otherAnony();
         }
-
-        //add class property
-        profileDiv.className = 'profile';
-        blockDiv.className = 'block';
-        textSpan.innerText = data;
-
-        //add Value
-        blockDiv.appendChild(textSpan);
-        articleMessage.appendChild(profileDiv);
-        articleMessage.appendChild(blockDiv);
-        messageFragment.appendChild(articleMessage);
-
-        //add messageField
-        messageField.appendChild(messageFragment);
-
-        //change profile picture
-        pictureChange.my();
 
         //reset TextFieldValue
         document.getElementById('chatInput').value = '';

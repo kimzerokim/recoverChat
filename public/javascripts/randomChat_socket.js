@@ -47,18 +47,16 @@ var socketFunction = (function () {
     socket.on('randomChatMatched', function (self, chatRoom) {
         if (userId === self) {
             console.log("연결된 나는 " + userId);
-            console.log("채팅방 이름은 - 전달 받은 채팅방" + chatRoom);
-            console.log("채팅방 이름은 - 실제 접속한 채팅방" + socket.room);
+            console.log("채팅방 이름은 - 전달 받은 채팅방 " + chatRoom);
         }
-
     });
 
-    var getChatRoom = function() {
+    var getChatRoom = function () {
         return chatRoom;
     };
 
     return {
-        getChatRoom : getChatRoom
+        getChatRoom: getChatRoom
     }
 })();
 
@@ -72,4 +70,12 @@ var chatCount = (function () {
         chatTime++;
         chatTimeDiv.innerHTML = chatTime + '분 째 채팅 중!';
     }, 60 * 1000);
+
+    var getChatTime = function () {
+        return chatTime;
+    };
+
+    return {
+        getChatTime: getChatTime
+    }
 })();
