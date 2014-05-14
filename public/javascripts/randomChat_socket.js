@@ -74,6 +74,8 @@ var socketFunction = (function () {
             console.log("연결된 나는 " + userId);
             console.log("채팅방 이름은 - 전달 받은 채팅방 " + chatRoom);
         }
+
+        alert('랜덤채팅에 연결되었습니다.');
     });
 
     var getChatRoom = function () {

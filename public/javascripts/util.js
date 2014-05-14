@@ -19,14 +19,25 @@ var pictureChange = (function () {
         var otherMessage = document.getElementsByClassName('otherMessage'),
             otherMessageLength = otherMessage.length,
             anonyPicture = "<img src = \"images/Anonyprofile.png\">";
+
         for (var j = 0; j < otherMessageLength; j++) {
             otherMessage[j].firstChild.innerHTML = anonyPicture;
         }
     };
 
+    var otherPicture = function (reqPic) {
+        var otherMessage = document.getElementsByClassName('otherMessage'),
+            otherMessageLength = otherMessage.length;
+
+        for (var j = 0; j < otherMessageLength; j++) {
+            otherMessage[j].firstChild.innerHTML = reqPic;
+        }
+    };
+
     return {
         my: myPictureChange,
-        otherAnony: otherPictureChange_Anony
+        otherAnony: otherPictureChange_Anony,
+        other: otherPicture
     }
 })();
 
@@ -71,15 +82,43 @@ var button = (function () {
             //when opposite user ask cur user
             socket.on('randomChatAskOppositeReceive', function (reqUser) {
                 var curUser = userInfo.getId(),
+                    info = document.getElementById('info'),
                     alertWindow = document.getElementById('alert');
-                
-                console.log('랜덤채팅요청');
-                
+
                 if (curUser === reqUser) {
                     alertWindow.style.display = 'block';
+                    info.style.display = 'block';
                 }
                 else {
                     alert('성공적으로 요청을 보냈습니다.');
+                }
+            });
+        },
+
+        sendUserInfoToOpposite: function () {
+            socket.emit('randomChatSendOpposite', userInfo.getId(), true);
+        },
+
+        sendRejectToOpposite: function () {
+            socket.emit('randomChatSendOpposite', userInfo.getId(), false);
+        },
+
+        receiveOppositeAccept: function () {
+            var curUserPic = document.getElementById('userPic').innerHTML;
+
+            socket.on('randomChatReceiveOpposite', function (reqUser, accept) {
+                if (userInfo.getId() === reqUser) {
+                    if (accept === true) {
+                        alert('상대방이 수락하였습니다.');
+                    }
+                    else {
+                        alert('상대방이 거절하였습니다.');
+                    }
+                }
+                else {
+                    if (accept === true) {
+                        socket.emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
+                    }
                 }
             });
         }
@@ -91,15 +130,24 @@ var button = (function () {
             info = document.getElementById('info'),
             chatInfo = document.getElementById('chatInfo'),
             leaveChat = document.getElementById('leaveChat'),
-            findFriend = document.getElementById('findFriend');
+            findFriend = document.getElementById('findFriend'),
+            requestAccept = document.getElementById('friendRequestAccept'),
+            alert = document.getElementById('alert'),
+            requestReject = document.getElementById('friendRequestReject');
 
         info.style.display = 'none';
         chatInfo.style.display = 'none';
+        alert.style.display = 'none';
+
         chatMenuButton.addEventListener('click', menuPopup, true);
         leaveChat.addEventListener('click', detailAction.leaveChat, true);
         findFriend.addEventListener('click', detailAction.askOpposite, true);
-        
+        requestAccept.addEventListener('click', detailAction.sendUserInfoToOpposite, true);
+        requestReject.addEventListener('click', detailAction.sendRejectToOpposite, true);
+
         detailAction.receiveOpposite();
+        detailAction.receiveOppositeAccept();
+        detailAction.receiveOppositePic();
     };
 
     return {
@@ -123,6 +171,10 @@ var dynamicResize = (function () {
 
 //for chatInputFunction
 var chatInputFunction = (function () {
+
+    var oppositePicAuth = false,
+        oppositePic;
+
     //receive data and insert chatNode
     socket.on('randomChatMessageReceive', function (data, userId) {
         chatInsert(data, userId);
@@ -167,7 +219,12 @@ var chatInputFunction = (function () {
             createChatNode();
 
             //change profile picture
-            pictureChange.otherAnony();
+            if (oppositePicAuth === false) {
+                pictureChange.otherAnony();
+            }
+            else {
+                pictureChange.other(oppositePic);
+            }
         }
 
         //reset TextFieldValue
@@ -177,6 +234,18 @@ var chatInputFunction = (function () {
         var chatField = document.getElementById("messages");
         chatField.scrollTop = chatField.scrollHeight;
     };
+
+    var receiveOppositePic = function () {
+        socket.on('randomChatSendPic', function (reqUser, reqPic) {
+            if (userInfo.getId() != reqUser) {
+                pictureChange.other(reqPic);
+                oppositePic = reqPic;
+                oppositePicAuth = true;
+            }
+        });
+    };
+
+    receiveOppositePic();
 
     var emitChatEvent = function (userId) {
         var rowChatInputText = document.getElementById('chatInput').value,

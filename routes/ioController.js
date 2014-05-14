@@ -104,11 +104,21 @@ var init = function (app, io) {
             io.sockets.in(randomChatRoom).emit('randomChatMessageReceive', XSSData, userId);
         });
 
-        socket.on('randomChatAskOppositeSend', function(reqUser) {
-            var room = socket.room;
-            io.sockets.in(room).emit('randomChatAskOppositeReceive', reqUser);
+        // 상대방을 궁금해하면 이쪽으로 보내준다.
+        socket.on('randomChatAskOppositeSend', function (reqUser) {
+            io.sockets.in(socket.room).emit('randomChatAskOppositeReceive', reqUser);
+        });
+
+        //요청에 수락하였을경우 true, 거절하였을경우 false
+        socket.on('randomChatSendOpposite', function (reqUser, accept) {
+            io.sockets.in(socket.room).emit('randomChatReceiveOpposite', reqUser, accept);
+        });
+
+        //상대방의 사진을 전송해준다.
+        socket.on('randomChatRequestUserInfo', function (reqUser, reqPic) {
+            io.sockets.in(socket.room).emit('randomChatSendPic', reqUser, reqPic);
         });
     });
 };
 
-module.exports = init;
+module.export = init;
