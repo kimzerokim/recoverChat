@@ -121,4 +121,4 @@ var init = function (app, io) {
     });
 };
 
-module.export = init;
+module.exports = init;

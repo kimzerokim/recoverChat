@@ -86,21 +86,33 @@ var button = (function () {
                     alertWindow = document.getElementById('alert');
 
                 if (curUser === reqUser) {
-                    alertWindow.style.display = 'block';
-                    info.style.display = 'block';
+                    alert('성공적으로 요청을 보냈습니다.');
                 }
                 else {
-                    alert('성공적으로 요청을 보냈습니다.');
+                    alertWindow.style.display = 'block';
+                    info.style.display = 'block';
                 }
             });
         },
 
         sendUserInfoToOpposite: function () {
+            var info = document.getElementById('info'),
+                alertWindow = document.getElementById('alert');
+
             socket.emit('randomChatSendOpposite', userInfo.getId(), true);
+
+            alertWindow.style.display = 'none';
+            info.style.display = 'none';
         },
 
         sendRejectToOpposite: function () {
+            var info = document.getElementById('info'),
+                alertWindow = document.getElementById('alert');
+
             socket.emit('randomChatSendOpposite', userInfo.getId(), false);
+
+            alertWindow.style.display = 'none';
+            info.style.display = 'none';
         },
 
         receiveOppositeAccept: function () {
@@ -147,7 +159,6 @@ var button = (function () {
 
         detailAction.receiveOpposite();
         detailAction.receiveOppositeAccept();
-        detailAction.receiveOppositePic();
     };
 
     return {
