@@ -66,7 +66,7 @@ var button = (function () {
 
     var detailAction = {
         leaveChat: function () {
-            window.location = '/randomChat';
+            window.location.reload();
         },
 
         askOpposite: function () {
@@ -121,15 +121,24 @@ var button = (function () {
             socket.on('randomChatReceiveOpposite', function (reqUser, accept) {
                 if (userInfo.getId() === reqUser) {
                     if (accept === true) {
-                        alert('상대방이 수락하였습니다.');
-                    }
-                    else {
-                        alert('상대방이 거절하였습니다.');
+                        socket.emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
                     }
                 }
                 else {
                     if (accept === true) {
+                        alert('상대방이 수락하였습니다.');
                         socket.emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
+                    }
+                    else {
+                        alert('상대방이 거절하였습니다.');
+                        var findFriend = document.getElementById('findFriend'),
+                            findFriendClone = findFriend.cloneNode(true);
+
+                        findFriend.parentNode.replaceChild(findFriendClone, findFriend);
+
+                        findFriendClone.addEventListener('click', function() {
+                            alert('한 번 거절당하시면 다시 물어볼 수 없습니다.');
+                        }, true);
                     }
                 }
             });
@@ -267,7 +276,6 @@ var chatInputFunction = (function () {
         }
         if (curChatRoom === null || curChatRoom === undefined) {
             //alert('아직 연결이 되지 않았습니다.')
-            return;
         }
         else {
             socket.emit('randomChatMessageSend', rowChatInputText, userId, curChatRoom);
