@@ -1,7 +1,27 @@
 var socket = io.connect('http://www.skkuleaf.com:3000');
 
+var userInfo = (function () {
+    var userId;
+
+    var setUserId = function () {
+        userId = document.getElementById('userId').innerHTML;
+        document.getElementById('userId').innerHTML = '';
+        console.log("userId : " + userId + "set");
+    };
+
+    setUserId();
+
+    var getUserId = function () {
+        return userId;
+    };
+
+    return {
+        getId: getUserId
+    }
+})();
+
 var socketFunction = (function () {
-    var userId = document.getElementById('userId').innerHTML,
+    var userId = userInfo.getId(),
         chatRoom = undefined;
 
     //socket connect with server
@@ -45,6 +65,11 @@ var socketFunction = (function () {
     });
 
     socket.on('randomChatMatched', function (self, chatRoom) {
+        var messageField = document.getElementById('messages');
+
+        //when new randomChat start, clear messageField
+        messageField.innerHTML = '';
+
         if (userId === self) {
             console.log("연결된 나는 " + userId);
             console.log("채팅방 이름은 - 전달 받은 채팅방 " + chatRoom);

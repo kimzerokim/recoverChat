@@ -103,6 +103,11 @@ var init = function (app, io) {
             var XSSData = XSSfilter(data);
             io.sockets.in(randomChatRoom).emit('randomChatMessageReceive', XSSData, userId);
         });
+
+        socket.on('randomChatAskOppositeSend', function(reqUser) {
+            var room = socket.room;
+            io.socket.in(room).emit('randomChatAskOppositeReceive', reqUser);
+        });
     });
 };
 

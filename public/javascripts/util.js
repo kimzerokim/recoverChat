@@ -51,18 +51,51 @@ var button = (function () {
             body.removeEventListener('click', menuPopup, true);
             chatScroller.removeEventListener('click', menuPopup, true);
         }
+    };
 
+    var detailAction = {
+        leaveChat: function () {
+            window.location = '/randomChat';
+        },
+
+        askOpposite: function () {
+            if (chatCount.getChatTime() <= 14) {
+                alert('15분이 지나면 상대방을 물어볼 수 있습니다.');
+            }
+            else {
+                socket.emit('randomChatAskOppositeSend', userInfo.getId());
+            }
+        },
+
+        receiveOpposite: function () {
+            //when opposite user ask cur user
+            socket.on('randomChatAskOppositeReceive', function (reqUser) {
+                var curUser = userInfo.getId(),
+                    alertWindow = document.getElementById('alert');
+
+                if (curUser === reqUser) {
+                    alertWindow.style.display = 'block';
+                }
+                else {
+                    alert('성공적으로 요청을 보냈습니다.');
+                }
+            });
+        }
     };
 
     // addEvent
     var addEvent = function () {
         var chatMenuButton = document.getElementById('chatMenu'),
             info = document.getElementById('info'),
-            chatInfo = document.getElementById('chatInfo');
+            chatInfo = document.getElementById('chatInfo'),
+            leaveChat = document.getElementById('leaveChat'),
+            findFriend = document.getElementById('findFriend');
 
         info.style.display = 'none';
         chatInfo.style.display = 'none';
         chatMenuButton.addEventListener('click', menuPopup, true);
+        leaveChat.addEventListener('click', detailAction.leaveChat, true);
+        findFriend.addEventListener('click', detailAction.askOpposite, true);
     };
 
     return {
@@ -99,7 +132,7 @@ var chatInputFunction = (function () {
             blockDiv = document.createElement('div'),
             textSpan = document.createElement('span'),
             messageField = document.getElementById('messages'),
-            curUserId = document.getElementById('userId').innerHTML;
+            curUserId = userInfo.getId();
 
         var createChatNode = function () {
             //add class property
@@ -149,7 +182,8 @@ var chatInputFunction = (function () {
             return;
         }
         if (curChatRoom === null || curChatRoom === undefined) {
-            alert('아직 연결이 되지 않았습니다.')
+            //alert('아직 연결이 되지 않았습니다.')
+            return;
         }
         else {
             socket.emit('randomChatMessageSend', rowChatInputText, userId, curChatRoom);
@@ -159,7 +193,7 @@ var chatInputFunction = (function () {
     // addEvent
     var addEvent = {
         clickSend: function () {
-            var userId = document.getElementById('userId').innerHTML,
+            var userId = userInfo.getId(),
                 chatSendButton = document.getElementById('chatSend');
 
             //to pass parameter at addEventListener
@@ -170,7 +204,7 @@ var chatInputFunction = (function () {
 
         enterSend: function () {
             var chatInput = document.getElementById('chatInput'),
-                userId = document.getElementById('userId').innerHTML;
+                userId = userInfo.getId();
 
             chatInput.onkeypress = function (event) {
                 event = event || window.event;
