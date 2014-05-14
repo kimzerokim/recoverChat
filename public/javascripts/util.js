@@ -59,7 +59,7 @@ var button = (function () {
         },
 
         askOpposite: function () {
-            if (chatCount.getChatTime() <= 14) {
+            if (chatCount.getChatTime() >= 14) {
                 alert('15분이 지나면 상대방을 물어볼 수 있습니다.');
             }
             else {
@@ -72,7 +72,9 @@ var button = (function () {
             socket.on('randomChatAskOppositeReceive', function (reqUser) {
                 var curUser = userInfo.getId(),
                     alertWindow = document.getElementById('alert');
-
+                
+                console.log('랜덤채팅요청');
+                
                 if (curUser === reqUser) {
                     alertWindow.style.display = 'block';
                 }
@@ -96,6 +98,8 @@ var button = (function () {
         chatMenuButton.addEventListener('click', menuPopup, true);
         leaveChat.addEventListener('click', detailAction.leaveChat, true);
         findFriend.addEventListener('click', detailAction.askOpposite, true);
+        
+        detailAction.receiveOpposite();
     };
 
     return {

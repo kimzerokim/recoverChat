@@ -106,7 +106,7 @@ var init = function (app, io) {
 
         socket.on('randomChatAskOppositeSend', function(reqUser) {
             var room = socket.room;
-            io.socket.in(room).emit('randomChatAskOppositeReceive', reqUser);
+            io.sockets.in(room).emit('randomChatAskOppositeReceive', reqUser);
         });
     });
 };
