@@ -125,8 +125,8 @@ if (cluster.isMaster) {
         res.redirect('/contact');
     }
 
-    app.get('/', ensureAuthenticated, routes.friendChat);
-    app.get('/randomChat', ensureAuthenticated, routes.randomChat);
+    app.get('/', ensureAuthenticated, routes.friendChat(io));
+    app.get('/randomChat', ensureAuthenticated, routes.randomChat(io));
     app.get('/welcome', routes.welcome);
 
     // mail send function

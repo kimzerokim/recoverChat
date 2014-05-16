@@ -16,7 +16,8 @@ exports.getFbData = function (accessToken, apiPath, callback) {
         });
 
         result.on('end', function () {
-            callback(buffer);
+            var data = JSON.parse(buffer);
+            callback(data);
         });
     });
 

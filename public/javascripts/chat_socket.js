@@ -31,3 +31,18 @@
 //        CHAT.message.add(json)
 //    });
 //})();
+
+var socket = io.connect('http://www.skkuleaf.com:3000');
+
+var socketfunction = (function () {
+    //socket connect with server
+    socket.on('connect', function () {
+        socket.emit('friendChatConnected');
+        //console.log('connect with server');
+        //console.log(userId);
+    });
+
+    socket.on('friendChatEnterEmptyRoom', function (data) {
+        console.log(data);
+    });
+})();

@@ -79,9 +79,8 @@ var socketFunction = (function () {
         if (chatAlert === false) {
             alert('랜덤채팅에 연결되었습니다.');
             chatAlert = true;
+            chatCount.start();
         }
-
-        chatCount.start();
     });
 
     var getChatRoom = function () {
