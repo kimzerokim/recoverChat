@@ -14,4 +14,7 @@ html
             img(src='/images/loading.gif')
         #loadingText
             img(src='/images/loadingText.png')
+        #userId
+            | #{user.id}
+        script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
         script(src='/javascripts/initUser.js')

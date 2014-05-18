@@ -27,6 +27,22 @@ exports.initUser = function (io) {
             callback(friendArray);
         };
 
+        var getSignedUserList = function (callback) {
+            mysqlConn.query('SELECT signorder, id FROM user', function (err, result) {
+                if (err)
+                    console.log(err);
+                else {
+                    callback(result);
+//                    [ { signorder: 1, id: 1055497070 },
+//                        { signorder: 2, id: 100008109462734 } ]
+                }
+            });
+        };
+
+        getSignedUserList(function (result) {
+            console.log(result);
+        });
+
         //check, register user
         mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
             if (err)
@@ -48,14 +64,20 @@ exports.initUser = function (io) {
 
             extractFriendList(data, function (list) {
                 friendList = list;
+                console.log(list);
                 io.sockets.on('connection', function (socket) {
-                    socket.emit('makingFriendListComplete');
-                    console.log('sendCompleteMessage');
+                    socket.on('prepareForFriendChat', function (userId) {
+                        socket.username = userId;
+                        socket.room = userId;
+                        socket.join(userId);
+
+                        socket.emit('makingFriendListComplete');
+                    });
                 });
             });
         });
 
-        res.render('initUser');
+        res.render('initUser', {user: req.user});
     }
 };
 
