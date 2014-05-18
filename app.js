@@ -125,7 +125,7 @@ if (cluster.isMaster) {
         res.redirect('/contact');
     }
 
-    app.get('/', ensureAuthenticated, routes.initUser);
+    app.get('/', ensureAuthenticated, routes.initUser(io));
     app.get('/friendChat', ensureAuthenticated, routes.friendChat(io));
     app.get('/randomChat', ensureAuthenticated, routes.randomChat(io));
     app.get('/welcome', routes.welcome);

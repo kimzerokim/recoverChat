@@ -4,9 +4,8 @@ var mysql = require('mysql'),
     mysqlConfig = require('./mysqlConfig').returnInfo(),
     mysqlConn = mysql.createConnection(mysqlConfig);
 
-exports.initUser = function (req, res) {
-    res.render('initUser');
-    return function(req,res) {
+exports.initUser = function (io) {
+    return function (req, res) {
         var curUser = req.user,
             userInfo = {
                 id: curUser.id,
@@ -49,9 +48,14 @@ exports.initUser = function (req, res) {
 
             extractFriendList(data, function (list) {
                 friendList = list;
-                res.redirect('/friendChat');
+                io.sockets.on('connection', function (socket) {
+                    socket.emit('makingFriendListComplete');
+                    console.log('sendCompleteMessage');
+                });
             });
         });
+
+        res.render('initUser');
     }
 };
 
