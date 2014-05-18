@@ -216,7 +216,7 @@ var chatInputFunction = (function () {
             blockDiv.className = 'block';
             textSpan.innerText = data;
 
-            //add Value
+            //append Node
             blockDiv.appendChild(textSpan);
             articleMessage.appendChild(profileDiv);
             articleMessage.appendChild(blockDiv);
@@ -233,6 +233,9 @@ var chatInputFunction = (function () {
 
             //change profile picture
             pictureChange.my();
+
+            //reset TextFieldValue
+            document.getElementById('chatInput').value = '';
         }
         else {
             articleMessage.className = 'otherMessage';
@@ -246,9 +249,6 @@ var chatInputFunction = (function () {
                 pictureChange.other(oppositePic);
             }
         }
-
-        //reset TextFieldValue
-        document.getElementById('chatInput').value = '';
 
         //move scroll to latest chat (to bottom)
         var chatField = document.getElementById("messages");
@@ -265,6 +265,7 @@ var chatInputFunction = (function () {
         });
     };
 
+    //receive opposite user picture
     receiveOppositePic();
 
     var emitChatEvent = function (userId) {

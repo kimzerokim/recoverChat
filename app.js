@@ -125,7 +125,8 @@ if (cluster.isMaster) {
         res.redirect('/contact');
     }
 
-    app.get('/', ensureAuthenticated, routes.friendChat(io));
+    app.get('/', ensureAuthenticated, routes.initUser);
+    app.get('/friendChat', ensureAuthenticated, routes.friendChat(io));
     app.get('/randomChat', ensureAuthenticated, routes.randomChat(io));
     app.get('/welcome', routes.welcome);
 
@@ -138,6 +139,7 @@ if (cluster.isMaster) {
     //test function
     app.get('/test', routes.friendChat);
     app.get('/randomChatTest', routes.randomChat);
+    app.get('/initUserTest', routes.initUser);
 
     server.listen(app.get('port'), function () {
         console.log('\n///////////////////////////////////////////////\n' +
