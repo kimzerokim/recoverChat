@@ -5,53 +5,54 @@ var mysql = require('mysql'),
     mysqlConn = mysql.createConnection(mysqlConfig);
 
 exports.initUser = function (req, res) {
-    var curUser = req.user,
-        userInfo = {
-            id: curUser.id,
-            displayname: curUser.displayName,
-            username: curUser.username,
-            gender: curUser.gender
+    res.render('initUser');
+    return function(req,res) {
+        var curUser = req.user,
+            userInfo = {
+                id: curUser.id,
+                displayname: curUser.displayName,
+                username: curUser.username,
+                gender: curUser.gender
+            };
+
+        var extractFriendList = function (data, callback) {
+            var friendData = data.data;
+            var friendArray = [];
+
+            for (var i in friendData) {
+                if (friendData.hasOwnProperty(i)) {
+                    friendArray.push(friendData[i].id);
+                }
+            }
+
+            callback(friendArray);
         };
 
-    var extractFriendList = function (data, callback) {
-        var friendData = data.data;
-        var friendArray = [];
-
-        for (var i in friendData) {
-            if (friendData.hasOwnProperty(i)) {
-                friendArray.push(friendData[i].id);
+        //check, register user
+        mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
+            if (err)
+            //res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
+                console.log(err);
+            else {
+                if (result.length === 0) {
+                    mysqlConn.query('INSERT INTO user SET ?', userInfo, function (err) {
+                        if (err)
+                            console.log(err);
+                    });
+                }
             }
-        }
-
-        callback(friendArray);
-    };
-
-    //check, register user
-    mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
-        if (err)
-        //res.render('message', {message: "알 수 없는 에러가 발생하였습니다."});
-            console.log(err);
-        else {
-            if (result.length === 0) {
-                mysqlConn.query('INSERT INTO user SET ?', userInfo, function (err) {
-                    if (err)
-                        console.log(err);
-                });
-            }
-        }
-    });
-
-    //getFacebookInfo
-    facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
-        var friendList;
-
-        extractFriendList(data, function (list) {
-            friendList = list;
-            res.redirect('/friendChat');
         });
-    });
 
-    res.render('initUser');
+        //getFacebookInfo
+        facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
+            var friendList;
+
+            extractFriendList(data, function (list) {
+                friendList = list;
+                res.redirect('/friendChat');
+            });
+        });
+    }
 };
 
 exports.friendChat = function (io) {
