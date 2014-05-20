@@ -6,7 +6,7 @@ body {
 #title {
     position: absolute;
     left : 50%;
-    margin : 70px 0 0 -121px;
+    margin : 40px 0 0 -121px;
 }
 
 #title img {
@@ -17,7 +17,7 @@ body {
 #loadingGif {
     position: absolute;
     left: 50%;
-    margin : 230px 0 0 -51px;
+    margin : 180px 0 0 -51px;
 }
 
 #loadingGif img {
@@ -28,5 +28,16 @@ body {
 #loadingText {
     position: absolute;
     left: 50%;
-    margin : 410px 0 0 -60px;
+    margin : 340px 0 0 -60px;
+}
+
+#randomChat {
+    position: absolute;
+    left: 50%;
+    margin : 460px 0 0 -99px;
+    cursor: pointer;
+}
+
+#userId {
+    display : none;
 }

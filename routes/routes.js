@@ -33,15 +33,12 @@ exports.initUser = function (io) {
                     console.log(err);
                 else {
                     callback(result);
+                    // output example
 //                    [ { signorder: 1, id: 1055497070 },
 //                        { signorder: 2, id: 100008109462734 } ]
                 }
             });
         };
-
-        getSignedUserList(function (result) {
-            console.log(result);
-        });
 
         //check, register user
         mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
@@ -58,19 +55,16 @@ exports.initUser = function (io) {
             }
         });
 
-        //getFacebookInfo
-        facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
-            var friendList;
+        io.sockets.on('connection', function (socket) {
+            socket.on('prepareForFriendChat', function (userId) {
+                socket.username = userId;
+                socket.room = userId;
+                socket.join(userId);
 
-            extractFriendList(data, function (list) {
-                friendList = list;
-                console.log(list);
-                io.sockets.on('connection', function (socket) {
-                    socket.on('prepareForFriendChat', function (userId) {
-                        socket.username = userId;
-                        socket.room = userId;
-                        socket.join(userId);
-
+                //getFacebookInfo
+                facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
+                    extractFriendList(data, function (list) {
+                        socket.friendList = list;
                         socket.emit('makingFriendListComplete');
                     });
                 });
@@ -112,4 +106,8 @@ exports.loginContact = function (req, res) {
 
 exports.contact = function (req, res) {
     res.render('contact');
+};
+
+exports.initUserTest = function(req,res) {
+    res.render('initUser');
 };

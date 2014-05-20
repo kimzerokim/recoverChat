@@ -139,7 +139,7 @@ if (cluster.isMaster) {
     //test function
     app.get('/test', routes.friendChat);
     app.get('/randomChatTest', routes.randomChat);
-    app.get('/initUserTest', routes.initUser);
+    app.get('/initUserTest', routes.initUserTest);
 
     server.listen(app.get('port'), function () {
         console.log('\n///////////////////////////////////////////////\n' +
