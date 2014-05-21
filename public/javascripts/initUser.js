@@ -60,4 +60,12 @@ var userInfo = (function () {
     socket.on('friendChatMatchFinish', function () {
         window.location = '/friendChat';
     });
+
+    socket.on('notEnoughFriend', function() {
+        console.log('친구가 적어 시작할 수 없어요 ㅜㅠ ');
+    });
+
+    socket.on('waitForOtherFriend', function() {
+        alert('다른 친구가 들어오길 기다리고 있어요');
+    });
 })();

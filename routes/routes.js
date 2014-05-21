@@ -48,7 +48,7 @@ exports.initUser = function (io) {
             });
         };
 
-        var findDuplicate = function (arr1, arr2) {
+        var findDuplicate = function (arr1, arr2, callback) {
             var duplicateValue = [];
 
             var len1 = arr1.length,
@@ -66,31 +66,52 @@ exports.initUser = function (io) {
                 }
                 else {
                     duplicateValue.push(arr1[i]);
+                    i++;
+                    j++;
                 }
             }
 
-            return duplicateValue;
+            callback(duplicateValue);
+        };
+
+        var makeMatrix = function (friendList, userList, callback) {
+            //array, int
+            var curUserFriendList = friendList,
+            //array, int
+                wholeUserList = userList;
+
+            //ascending order sort
+            wholeUserList.sort(function (a, b) {
+                return a - b
+            });
+
+            findDuplicate(curUserFriendList, wholeUserList, function (data) {
+                callback(data);
+            });
         };
 
         var matchingFriend = function (userId, userFriend, curWaitingUser, callback) {
             //userFriend, curWaitingUser are pre-sorted
-            var randomList = findDuplicate(userFriend, curWaitingUser),
-                matchingResult = {
-                    matched: false,
-                    matchClient: null
-                };
+            findDuplicate(userFriend, curWaitingUser, function (list) {
 
-            if (randomList.length === 0) {
-                callback(matchingResult);
-            }
-            else {
-                var resultClient = randomList[Math.floor(Math.random() * randomList.length)];
-                matchingResult.matched = true;
-                matchingResult.matchClient = resultClient;
-                callback(matchingResult);
-            }
+                var randomList = list,
+                    matchingResult = {
+                        matched: false,
+                        matchClient: null
+                    };
 
+                if (randomList.length === 0) {
+                    callback(matchingResult);
+                }
+                else {
+                    var resultClient = randomList[Math.floor(Math.random() * randomList.length)];
+                    matchingResult.matched = true;
+                    matchingResult.matchClient = resultClient;
+                    callback(matchingResult);
+                }
+            });
         };
+
 
         //check, register user
         mysqlConn.query('SELECT id FROM user WHERE id = ?', [curUser.id], function (err, result) {
@@ -118,33 +139,30 @@ exports.initUser = function (io) {
                 friendChatWaitUserArray.sort(function (a, b) {
                     return a - b
                 });
+                //친구 목록을 배열에 저장한다.
 
-                //getFacebookInfo
-                facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
-                    //친구 목록을 배열에 저장한다.
-                    extractFriendList(data, function (list) {
-                        socket.friendList = list;
-                        console.log(list);
-                        //전체 사용자를 배열에 저장한다.
-                        getSignedUserList(function (result) {
-                            console.log(result);
-                            //친구와 사용자 중 겹치는 사람들을 추출한다.
-                            friendMatrix.makeMatrix(socket.friendList, result, function (friendArray) {
-                                console.log(friendArray);
-                                friendChatWaitUser[userId] = friendArray;
-                                if (friendArray.length === 0) {
-                                    socket.emit('notEnoughFriend');
-                                }
-                                else {
-                                    //친구 리스트 중 매칭을 시켜준다.
-                                    matchingFriend(userId, friendArray, friendChatWaitUserArray, function (final) {
-                                        if (final.matched === true) {
-                                            io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, final.matchClient);
-                                            io.sockets.in(final.matchClient).emit('friendChatEnterEmptyRoom', final.matchClient, userId);
-                                        }
-                                    });
-                                }
-                            });
+                extractFriendList(socket.rawFriendList, function (list) {
+                    socket.friendList = list;
+                    //전체 사용자를 배열에 저장한다.
+                    getSignedUserList(function (result) {
+                        //친구와 사용자 중 겹치는 사람들을 추출한다.
+                        makeMatrix(list, result, function (friendArray) {
+                            friendChatWaitUser[userId] = friendArray;
+                            if (friendArray.length === 0) {
+                                socket.emit('notEnoughFriend');
+                            }
+                            else {
+                                //친구 리스트 중 매칭을 시켜준다.
+                                matchingFriend(userId, friendArray, friendChatWaitUserArray, function (finalresult) {
+                                    if (finalresult.matched === true) {
+                                        io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, finalresult.matchClient);
+                                        io.sockets.in(finalresult.matchClient).emit('friendChatEnterEmptyRoom', finalresult.matchClient, userId);
+                                    }
+                                    else {
+                                        socket.emit('waitForOtherFriend');
+                                    }
+                                });
+                            }
                         });
                     });
                 });
