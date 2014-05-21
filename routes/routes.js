@@ -139,30 +139,33 @@ exports.initUser = function (io) {
                 friendChatWaitUserArray.sort(function (a, b) {
                     return a - b
                 });
-                //친구 목록을 배열에 저장한다.
 
-                extractFriendList(socket.rawFriendList, function (list) {
-                    socket.friendList = list;
-                    //전체 사용자를 배열에 저장한다.
-                    getSignedUserList(function (result) {
-                        //친구와 사용자 중 겹치는 사람들을 추출한다.
-                        makeMatrix(list, result, function (friendArray) {
-                            friendChatWaitUser[userId] = friendArray;
-                            if (friendArray.length === 0) {
-                                socket.emit('notEnoughFriend');
-                            }
-                            else {
-                                //친구 리스트 중 매칭을 시켜준다.
-                                matchingFriend(userId, friendArray, friendChatWaitUserArray, function (finalresult) {
-                                    if (finalresult.matched === true) {
-                                        io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, finalresult.matchClient);
-                                        io.sockets.in(finalresult.matchClient).emit('friendChatEnterEmptyRoom', finalresult.matchClient, userId);
-                                    }
-                                    else {
-                                        socket.emit('waitForOtherFriend');
-                                    }
-                                });
-                            }
+                //getFacebookInfo
+                facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
+                    //친구 목록을 배열에 저장한다.
+                    extractFriendList(data, function (list) {
+                        socket.friendList = list;
+                        //전체 사용자를 배열에 저장한다.
+                        getSignedUserList(function (result) {
+                            //친구와 사용자 중 겹치는 사람들을 추출한다.
+                            makeMatrix(list, result, function (friendArray) {
+                                friendChatWaitUser[userId] = friendArray;
+                                if (friendArray.length === 0) {
+                                    socket.emit('notEnoughFriend');
+                                }
+                                else {
+                                    //친구 리스트 중 매칭을 시켜준다.
+                                    matchingFriend(userId, friendArray, friendChatWaitUserArray, function (finalresult) {
+                                        if (finalresult.matched === true) {
+                                            io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, finalresult.matchClient);
+                                            io.sockets.in(finalresult.matchClient).emit('friendChatEnterEmptyRoom', finalresult.matchClient, userId);
+                                        }
+                                        else {
+                                            socket.emit('waitForOtherFriend');
+                                        }
+                                    });
+                                }
+                            });
                         });
                     });
                 });

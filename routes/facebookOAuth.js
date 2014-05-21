@@ -2,9 +2,7 @@
  * Created by YoungKim on 2014. 4. 13..
  */
 
-var facebookInfo = require('./facebookInfo');
-
-var init = function (app, io) {
+var init = function (app) {
     var pkginfo = require('../package');
     var passport = require('passport');
 
@@ -37,12 +35,6 @@ var init = function (app, io) {
         // done 메소드에 전달된 정보가 세션에 저장된다.
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //
-        io.sockets.on('connection', function (socket) {
-            facebookInfo.getFbData(accessToken, '/me/friends', function (data) {
-                socket.rawFriendList = data;
-            });
-        });
-
         process.nextTick(function () {
             accessToken_catch = accessToken;
             return done(null, profile);

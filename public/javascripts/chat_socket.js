@@ -31,10 +31,33 @@
 //        CHAT.message.add(json)
 //    });
 //})();
+var userInfo = (function () {
+    var userId;
 
-var socket = io.connect('http://www.skkuleaf.com:3000');
+    var setUserId = function () {
+        userId = document.getElementById('userId').innerHTML;
+        document.getElementById('userId').innerHTML = '';
+        console.log("userId set");
+    };
 
-var socketfunction = (function () {
+    setUserId();
+
+    var getUserId = function () {
+        return userId;
+    };
+
+    return {
+        getId: getUserId
+    }
+})();
+
+var socketFunction = (function () {
+    var socket = io.connect('http://www.skkuleaf.com:3000');
+
+    var getSocket = function () {
+        return socket;
+    };
+
     //socket connect with server
     socket.on('connect', function () {
         socket.emit('friendChatConnected');
@@ -42,7 +65,7 @@ var socketfunction = (function () {
         //console.log(userId);
     });
 
-    socket.on('friendChatEnterEmptyRoom', function (data) {
-        console.log(data);
-    });
+    return  {
+        getSocket : getSocket
+    }
 })();

@@ -67,7 +67,7 @@ if (cluster.isMaster) {
             }
         }));
         //configure passport-facebook
-        require('./routes/facebookOAuth')(app, io);
+        require('./routes/facebookOAuth')(app);
 
         app.use(express.methodOverride());
         app.use(express.compress());
