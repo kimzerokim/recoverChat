@@ -27,7 +27,37 @@ var userInfo = (function () {
         socket.emit('prepareForFriendChat', userId);
     });
 
-    socket.on('makingFriendListComplete', function () {
+    //start matching, enter room
+    socket.on('friendChatEnterEmptyRoom', function (self, other) {
+        var bigId,
+            smallId,
+            friendChatRoom;
+
+        // big id other first
+        if (self >= other) {
+            bigId = self;
+            smallId = other;
+        }
+        else {
+            bigId = other;
+            smallId = self;
+        }
+
+        friendChatRoom = bigId + 'friend' + smallId;
+
+        //console.log("내가 접속해야 할 방은 " + friendChatRoom);
+
+        //check socket user id is correct
+        if (self === userId) {
+            socket.emit('friendChatChangeAndEnterRoom', userId, friendChatRoom);
+        }
+    });
+
+    socket.on('friendChatRoomChanged', function () {
+        socket.emit('friendChatRoomChangedReceive');
+    });
+
+    socket.on('friendChatMatchFinish', function () {
         window.location = '/friendChat';
     });
 })();

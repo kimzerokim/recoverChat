@@ -48,9 +48,9 @@ var init = function (app, io) {
     var randomChatWaitUser = {};
 
     io.sockets.on('connection', function (socket) {
-        //////////////////////////
-        ///// randomChatSetting
-        //////////////////////////
+        //////////////////////
+        // randomChatFunction
+        //////////////////////
         socket.on('randomChatConnected', function (userId) {
             socket.username = userId;
             socket.room = userId;
@@ -119,8 +119,9 @@ var init = function (app, io) {
             io.sockets.in(socket.room).emit('randomChatSendPic', reqUser, reqPic);
         });
 
-        //friendChatFunction
-
+        //////////////////////
+        // friendChatFunction
+        //////////////////////
     });
 };
 

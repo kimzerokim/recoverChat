@@ -27,5 +27,3 @@ exports.getFbData = function (accessToken, apiPath, callback) {
 
     request.end();
 };
-
-
