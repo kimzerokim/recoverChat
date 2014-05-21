@@ -19,7 +19,7 @@ var userInfo = (function () {
 })();
 
 (function () {
-    var socket = io.connect('http://www.skkuleaf.com:3000');
+    var socket = io.connect('http://54.178.247.71');
 
     var userId = userInfo.getId();
 

@@ -74,13 +74,13 @@ var button = (function () {
                 alert('15분이 지나면 상대방을 물어볼 수 있습니다.');
             }
             else {
-                socket.emit('randomChatAskOppositeSend', userInfo.getId());
+                socketFunction.getSocket().emit('randomChatAskOppositeSend', userInfo.getId());
             }
         },
 
         receiveOpposite: function () {
             //when opposite user ask cur user
-            socket.on('randomChatAskOppositeReceive', function (reqUser) {
+            socketFunction.getSocket().on('randomChatAskOppositeReceive', function (reqUser) {
                 var curUser = userInfo.getId(),
                     info = document.getElementById('info'),
                     alertWindow = document.getElementById('alert');
@@ -99,7 +99,7 @@ var button = (function () {
             var info = document.getElementById('info'),
                 alertWindow = document.getElementById('alert');
 
-            socket.emit('randomChatSendOpposite', userInfo.getId(), true);
+            socketFunction.getSocket().emit('randomChatSendOpposite', userInfo.getId(), true);
 
             alertWindow.style.display = 'none';
             info.style.display = 'none';
@@ -109,7 +109,7 @@ var button = (function () {
             var info = document.getElementById('info'),
                 alertWindow = document.getElementById('alert');
 
-            socket.emit('randomChatSendOpposite', userInfo.getId(), false);
+            socketFunction.getSocket().emit('randomChatSendOpposite', userInfo.getId(), false);
 
             alertWindow.style.display = 'none';
             info.style.display = 'none';
@@ -118,16 +118,16 @@ var button = (function () {
         receiveOppositeAccept: function () {
             var curUserPic = document.getElementById('userPic').innerHTML;
 
-            socket.on('randomChatReceiveOpposite', function (reqUser, accept) {
+            socketFunction.getSocket().on('randomChatReceiveOpposite', function (reqUser, accept) {
                 if (userInfo.getId() === reqUser) {
                     if (accept === true) {
-                        socket.emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
+                        socketFunction.getSocket().emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
                     }
                 }
                 else {
                     if (accept === true) {
                         alert('상대방이 수락하였습니다.');
-                        socket.emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
+                        socketFunction.getSocket().emit('randomChatRequestUserInfo', userInfo.getId(), curUserPic);
                     }
                     else {
                         alert('상대방이 거절하였습니다.');
@@ -196,7 +196,7 @@ var chatInputFunction = (function () {
         oppositePic;
 
     //receive data and insert chatNode
-    socket.on('randomChatMessageReceive', function (data, userId) {
+    socketFunction.getSocket().on('randomChatMessageReceive', function (data, userId) {
         chatInsert(data, userId);
     });
 
@@ -256,7 +256,7 @@ var chatInputFunction = (function () {
     };
 
     var receiveOppositePic = function () {
-        socket.on('randomChatSendPic', function (reqUser, reqPic) {
+        socketFunction.getSocket().on('randomChatSendPic', function (reqUser, reqPic) {
             if (userInfo.getId() != reqUser) {
                 pictureChange.other(reqPic);
                 oppositePic = reqPic;
@@ -279,7 +279,7 @@ var chatInputFunction = (function () {
             //alert('아직 연결이 되지 않았습니다.')
         }
         else {
-            socket.emit('randomChatMessageSend', rowChatInputText, userId, curChatRoom);
+            socketFunction.getSocket().emit('randomChatMessageSend', rowChatInputText, userId, curChatRoom);
         }
     };
 
