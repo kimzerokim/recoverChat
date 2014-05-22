@@ -22,7 +22,7 @@
     "facebook": {
       "FACEBOOK_APP_ID": "589151347847650",
       "FACEBOOK_APP_SECRET": "a61385a296151ea793c0881430f3d5b1",
-      "callbackURL": "http://www.skkuleaf.com:3000/auth/facebook/callback"
+      "callbackURL": "http://www.recoverchat.co.kr/auth/facebook/callback"
     }
   }
 }
