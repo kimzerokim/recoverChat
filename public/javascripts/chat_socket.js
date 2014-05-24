@@ -52,7 +52,7 @@ var userInfo = (function () {
 })();
 
 var socketFunction = (function () {
-    var socket = io.connect('http://54.178.247.71');
+    var socket = io.connect('http://www.recoverchat.co.kr');
 
     var getSocket = function () {
         return socket;

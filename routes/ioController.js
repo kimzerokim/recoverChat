@@ -119,6 +119,10 @@ var init = function (app, io) {
             io.sockets.in(socket.room).emit('randomChatSendPic', reqUser, reqPic);
         });
 
+        socket.on('randomChatDisconnected', function (reqUser) {
+            io.sockets.in(socket.room).emit('randomChatOppositeDisconnected', reqUser);
+        });
+
         //////////////////////
         // friendChatFunction
         //////////////////////

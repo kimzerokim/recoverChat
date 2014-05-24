@@ -19,7 +19,7 @@ var userInfo = (function () {
 })();
 
 var socketFunction = (function () {
-    var socket = io.connect('http://54.178.247.71');
+    var socket = io.connect('http://www.recoverchat.co.kr');
 
     var getSocket = function () {
         return socket;
@@ -84,6 +84,24 @@ var socketFunction = (function () {
             alert('랜덤채팅에 연결되었습니다.');
             chatAlert = true;
             chatCount.start();
+            var chatConnectionStatus = document.getElementById('connectionStatus');
+            chatConnectionStatus.style.display = 'none';
+        }
+    });
+
+    socket.on('disconnect', function () {
+        socket.emit('randomChatDisconnected', userId);
+    });
+
+    socket.on('randomChatOppositeDisconnected', function (reqUser) {
+        if (userId === reqUser) {
+            console.log('little error occur');
+        }
+        else {
+            var chatConnectionStatus = document.getElementById('connectionStatus');
+            chatConnectionStatus.innerHTML = '채팅이 종료되었습니다';
+            chatConnectionStatus.style.backgroundColor = '#803F36';
+            chatConnectionStatus.style.display = 'block';
         }
     });
 
@@ -93,7 +111,7 @@ var socketFunction = (function () {
 
     return {
         getChatRoom: getChatRoom,
-        getSocket : getSocket
+        getSocket: getSocket
     }
 })();
 

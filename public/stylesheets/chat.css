@@ -76,7 +76,7 @@ body {
     line-height: 30px;
     font-size: 14px;
     z-index: 3;
-    display: none;
+    display: block;
 }
 
 #chatScroller {
