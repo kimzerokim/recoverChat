@@ -64,7 +64,7 @@ var userInfo = (function () {
     });
 
     socket.on('notEnoughFriend', function() {
-        console.log('친구가 적어 시작할 수 없어요 ㅜㅠ 더 많은 사람들에게 알려주세요!');
+        alert('친구가 적어 시작할 수 없어요 ㅜㅠ 더 많은 사람들에게 알려주세요!');
     });
 
     socket.on('waitForOtherFriend', function() {
