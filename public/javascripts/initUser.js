@@ -23,6 +23,8 @@ var userInfo = (function () {
 
     var waitFlag = false;
 
+    var notEnoughFriendsFlag = false;
+
     var userId = userInfo.getId();
 
     socket.on('connect', function () {
@@ -64,7 +66,10 @@ var userInfo = (function () {
     });
 
     socket.on('notEnoughFriend', function() {
-        alert('친구가 적어 시작할 수 없어요 ㅜㅠ 더 많은 사람들에게 알려주세요!');
+        if (notEnoughFriendsFlag === false) {
+            alert('친구가 적어 시작할 수 없어요 ㅜㅠ \n 더 많은 사람들에게 알려주세요!');
+            notEnoughFriendsFlag = true;
+        }
     });
 
     socket.on('waitForOtherFriend', function() {
