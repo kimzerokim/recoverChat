@@ -120,7 +120,7 @@ var init = function (app, io) {
         });
 
         socket.on('disconnect', function () {
-            io.sockets.in(socket.room).emit('randomChatOppositeDisconnected', socket.username);
+            io.sockets.in(socket.room).emit('oppositeDisconnected', socket.username);
         });
 
         //////////////////////

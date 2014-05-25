@@ -21,6 +21,8 @@ var userInfo = (function () {
 (function () {
     var socket = io.connect('http://www.recoverchat.co.kr');
 
+    var waitFlag = false;
+
     var userId = userInfo.getId();
 
     socket.on('connect', function () {
@@ -62,10 +64,13 @@ var userInfo = (function () {
     });
 
     socket.on('notEnoughFriend', function() {
-        console.log('친구가 적어 시작할 수 없어요 ㅜㅠ ');
+        console.log('친구가 적어 시작할 수 없어요 ㅜㅠ 더 많은 사람들에게 알려주세요!');
     });
 
     socket.on('waitForOtherFriend', function() {
-        alert('다른 친구가 들어오길 기다리고 있어요');
+        if (waitFlag === false) {
+            alert('다른 친구가 들어오길 기다리고 있어요');
+            waitFlag = true;
+        }
     });
 })();

@@ -129,61 +129,63 @@ exports.initUser = function (io) {
         });
 
         io.sockets.on('connection', function (socket) {
-            socket.on('prepareForFriendChat', function (userId) {
-                socket.username = userId;
-                socket.room = userId;
-                socket.join(userId);
-
-                //push and sort
-                friendChatWaitUserArray.push(parseInt(userId));
-                friendChatWaitUserArray.sort(function (a, b) {
-                    return a - b
-                });
-
-                //getFacebookInfo
-                facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
-                    //친구 목록을 배열에 저장한다.
-                    extractFriendList(data, function (list) {
-                        socket.friendList = list;
-                        //전체 사용자를 배열에 저장한다.
-                        getSignedUserList(function (result) {
-                            //친구와 사용자 중 겹치는 사람들을 추출한다.
-                            makeMatrix(list, result, function (friendArray) {
-                                friendChatWaitUser[userId] = friendArray;
-                                if (friendArray.length === 0) {
-                                    socket.emit('notEnoughFriend');
-                                }
-                                else {
-                                    //친구 리스트 중 매칭을 시켜준다.
-                                    matchingFriend(userId, friendArray, friendChatWaitUserArray, function (finalresult) {
-                                        if (finalresult.matched === true) {
-                                            io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, finalresult.matchClient);
-                                            io.sockets.in(finalresult.matchClient).emit('friendChatEnterEmptyRoom', finalresult.matchClient, userId);
-                                        }
-                                        else {
-                                            socket.emit('waitForOtherFriend');
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    });
-                });
-            });
-
-            socket.on('friendChatChangeAndEnterRoom', function (userId, friendChatRoom) {
-                //지금 요청이 들어온 소켓이 그 소켓이 맞는지 확인한다.
-                if (socket.room === userId) {
-                    socket.leave(socket.room);
-                    socket.room = friendChatRoom;
-                    socket.join(friendChatRoom);
-                    socket.emit('friendChatRoomChanged');
-                }
-            });
-
-            socket.on('friendChatRoomChangedReceive', function () {
-                io.sockets.in(socket.room).emit('friendChatMatchFinish');
-            })
+//            socket.on('prepareForFriendChat', function (userId) {
+//                socket.username = userId;
+//                socket.room = userId;
+//                socket.join(userId);
+//
+//                //push and sort
+//                friendChatWaitUserArray.push(parseInt(userId));
+//                friendChatWaitUserArray.sort(function (a, b) {
+//                    return a - b
+//                });
+//
+//                //getFacebookInfo
+//                facebookInfo.getFbData(req.session.catch_accessToken, '/me/friends', function (data) {
+//                    //친구 목록을 배열에 저장한다.
+//                    extractFriendList(data, function (list) {
+//                        //친구 목록을 소켓에 저장한다.
+//                        socket.friendList = list;
+//                        //전체 사용자를 배열에 저장한다.
+//                        getSignedUserList(function (result) {
+//                            //친구와 사용자 중 겹치는 사람들을 추출한다.
+//                            makeMatrix(list, result, function (friendArray) {
+//                                friendChatWaitUser[userId] = friendArray;
+//                                if (friendArray.length === 0) {
+//                                    socket.emit('notEnoughFriend');
+//                                }
+//                                else {
+//                                    //친구 리스트 중 매칭을 시켜준다.
+//                                    matchingFriend(userId, friendArray, friendChatWaitUserArray, function (finalresult) {
+//                                        if (finalresult.matched === true) {
+//                                            io.sockets.in(userId).emit('friendChatEnterEmptyRoom', userId, finalresult.matchClient);
+//                                            io.sockets.in(finalresult.matchClient).emit('friendChatEnterEmptyRoom', finalresult.matchClient, userId);
+//                                        }
+//                                        else {
+//                                            socket.emit('waitForOtherFriend');
+//                                        }
+//                                    });
+//                                }
+//                            });
+//                        });
+//                    });
+//                });
+//            });
+//
+//            socket.on('friendChatChangeAndEnterRoom', function (userId, friendChatRoom) {
+//                //지금 요청이 들어온 소켓이 그 소켓이 맞는지 확인한다.
+//                if (socket.room === userId) {
+//                    socket.leave(socket.room);
+//                    socket.room = friendChatRoom;
+//                    socket.join(friendChatRoom);
+//                    socket.emit('friendChatRoomChanged');
+//                }
+//            });
+//
+//            socket.on('friendChatRoomChangedReceive', function () {
+//                io.sockets.in(socket.room).emit('friendChatMatchFinish');
+//            });
+            socket.emit('notEnoughFriend');
         });
 
         res.render('initUser', {user: req.user});

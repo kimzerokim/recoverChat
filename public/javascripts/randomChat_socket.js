@@ -89,7 +89,7 @@ var socketFunction = (function () {
         }
     });
 
-    socket.on('randomChatOppositeDisconnected', function (reqUser) {
+    socket.on('oppositeDisconnected', function (reqUser) {
         if (userId === reqUser) {
             console.log('little error occur');
         }
